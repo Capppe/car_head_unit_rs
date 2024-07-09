@@ -1,0 +1,256 @@
+@import "./colors.css";
+
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color: #0f0f0f;
+  background-color: #f6f6f6;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+html {
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.main_layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 5px;
+}
+
+h1 {
+  text-align: center;
+}
+
+input,
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  color: #0f0f0f;
+  background-color: #ffffff;
+  transition: border-color 0.25s;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+button:active {
+  border-color: #396cd8;
+  background-color: #e8e8e8;
+}
+
+input,
+button {
+  outline: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f6f6f6;
+    background-color: #2f2f2f;
+  }
+
+  a:hover {
+    color: #24c8db;
+  }
+
+  input,
+  button {
+    color: #ffffff;
+    background-color: #0f0f0f98;
+  }
+
+  button:active {
+    background-color: #0f0f0f69;
+  }
+}
+
+.button img {
+  width: 70%;
+  height: 70%;
+}
+
+.window_button {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 25px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 100;
+  background-color: #353535;
+  height: 30%;
+  width: 100%;
+  border-bottom: 4px solid var(--orange);
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+#notification_container {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  align-items: center;
+  padding: 0px 40px;
+  width: 100%;
+}
+
+#notification_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6em 1.2em;
+}
+
+#notification_icon img {
+  height: 10%;
+  width: 100px;
+}
+
+#notification_actions_container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-right: 40px;
+}
+
+#notification_text_container {
+  flex-grow: 100;
+  align-self: flex-start;
+  justify-self: flex-start;
+}
+
+#notification_header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#notification_text {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin-bottom: 10px;
+}
+
+#notif_header {
+  font-size: 28px;
+}
+
+#notif_content {
+  font-size: 22px;
+}
+
+#taskbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: black;
+  max-height: 40px;
+  height: 40px;
+  padding: 0px 10px;
+}
+
+.taskbar_group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px
+}
+
+.taskbar_statuses {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.taskbar_img {
+  width: 35px;
+  height: 35px;
+}
+
+.taskbar_img img {
+  width: 88%;
+  object-fit: contain;
+  /* object-position: center; */
+}
+
+.text_orange {
+  color: var(--orange);
+}
+
+.text_bold {
+  font-weight: 600;
+}
+
+.text18 {
+  font-size: 18px;
+}
+
+.text20 {
+  font-size: 20px;
+}
+
+.text22 {
+  font-size: 22px;
+}
+
+.text24 {
+  font-size: 24px;
+}
+
+.invisible {
+  height: 0;
+  border: none;
+}
