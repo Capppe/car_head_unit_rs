@@ -1,7 +1,11 @@
 import { invoke } from "@tauri-apps/api/tauri"
 
-export async function getNetworkStatus(): Promise<string> {
-  const status = await invoke<string>("get_network_status")
-  console.log(status);
+interface NetworkStatus {
+  connected?: boolean;
+  devName?: string;
+}
+
+export async function getNetworkStatus(): Promise<NetworkStatus> {
+  const status = await invoke<NetworkStatus>("get_network_status");
   return status;
 }

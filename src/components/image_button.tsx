@@ -9,11 +9,11 @@ interface ImageButtonProps {
 
 export const ImageButton: React.FC<ImageButtonProps> = ({ id, imgSrc, text, onClick }) => {
   return (
-    <button className="button window_button" id={id} onClick={() => onClick()}>
+    <button className="button image_button window_button" id={id} onClick={() => onClick()}>
       {imgSrc !== "" &&
         <img src={imgSrc} alt="button image" />
       }
-      {text}
+      {text && text}
     </button>
   );
 }

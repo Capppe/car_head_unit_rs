@@ -1,62 +1,41 @@
-import { useEffect, useRef, useState } from "react";
-import { getNetworkStatus } from "../../utils/network";
+import { DropDown } from "./dropdown";
+import { useGlobalState } from "../globalstatecontext";
+import { getBtImgUrl, getNetImgUrl } from "../../utils/utils";
 
-export const Taskbar = () => {
+export const Taskbar: React.FC = () => {
   const imgPath = "./src/assets/icons/taskbar/";
 
-  const [currentTime, setCurrentTime] = useState<string>(`${new Date().getHours()}:${new Date().getMinutes()}`);
-  const [networkStatus, setNetworkStatus] = useState<string>("off");
-  const [bluetoothStatus, setBluetoothStatus] = useState<string>("off");
-  const [missedNotifs, setMissedNotifs] = useState<boolean>(false);
-  const timer = useRef<number>();
-
-  useEffect(() => {
-    const updateStatus = () => {
-      const date = new Date();
-      setCurrentTime(`${date.getHours()}:${date.getMinutes()}`);
-      getNetworkStatus().then((status) => {
-        setNetworkStatus(status);
-      });
-    }
-    updateStatus();
-
-    timer.current = window.setInterval(updateStatus, 10000);
-
-    return () => {
-      if (timer.current) {
-        clearInterval(timer.current);
-      }
-    };
-  }, []);
-
-
+  const { state, setState } = useGlobalState();
 
   return (
-    <div className="taskbar" id="taskbar">
+    <DropDown>
       <div className="taskbar_group" id="taskbar_left">
         <div className="text_orange text_bold text22" id="taskbar_location">
           Home
         </div>
       </div>
 
+      <img style={{ width: "100%", height: "inherit", objectFit: "fill", zIndex: "1", position: "absolute", left: "0%", right: "0%" }} src="./src/assets/icons/taskbar/bg.svg" />
+
       <div className="taskbar_group" id="taskbar_right">
         <div className="taskbar_statuses">
-          {missedNotifs &&
+          {state.noOfMissedNotifs !== 0 &&
             <div className="taskbar_img">
               <img src={`${imgPath}notif.svg`} />
             </div>
           }
           <div className="taskbar_img">
-            <img src={`${imgPath}${bluetoothStatus == "on" ? "bluetooth-on.svg" : bluetoothStatus == "off" ? "bluetooth-off.svg" : "bluetooth-searching.svg"}`} />
+            <img src={getBtImgUrl(state)}
+            />
           </div>
           <div className="taskbar_img">
-            <img src={`${imgPath}${networkStatus == "connected" ? "wifi-on.svg" : "wifi-off.svg"}`} />
+            <img src={getNetImgUrl(state)} />
           </div>
         </div>
         <div className="text_orange text_bold text24" id="clock">
-          {currentTime}
+          {state.currentTime}
         </div>
       </div>
-    </div>
+    </DropDown>
   );
 }

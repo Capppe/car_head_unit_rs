@@ -1,6 +1,8 @@
 @import "./colors.css";
 
 :root {
+  --topBarHeight: 40px;
+
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
@@ -22,6 +24,11 @@ html {
   margin: 0;
 }
 
+img {
+  width: 10%;
+  height: auto;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -31,9 +38,7 @@ html {
 
 .row {
   display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: row;
   gap: 10px;
 }
 
@@ -81,6 +86,12 @@ button:active {
 input,
 button {
   outline: none;
+}
+
+button.none {
+  all: unset;
+  width: 100%;
+  display: flex;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -190,6 +201,12 @@ button {
   font-size: 22px;
 }
 
+.dropdown {
+  background-color: black;
+  height: inherit;
+  padding: 0px 10px;
+}
+
 #taskbar {
   display: flex;
   flex-direction: row;
@@ -197,7 +214,7 @@ button {
   justify-content: space-between;
   background-color: black;
   max-height: 40px;
-  height: 40px;
+  height: var(--topBarHeight);
   padding: 0px 10px;
 }
 
@@ -223,7 +240,247 @@ button {
 .taskbar_img img {
   width: 88%;
   object-fit: contain;
-  /* object-position: center; */
+}
+
+.taskbarmenu_button_row {
+  display: flex;
+  flex-direction: row;
+}
+
+.taskbarmenu_button_div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--orange);
+  border-radius: 40px;
+  padding: 0px;
+}
+
+.taskbarmenu_button_div:hover {
+  opacity: 0.5;
+}
+
+.taskbarmenu_button_div img {
+  width: 10%;
+  height: auto;
+}
+
+.taskbarmenu_notifs_divider {
+  border: 1px solid var(--orange);
+  flex-grow: 10;
+}
+
+.taskbarmenu_notifs_container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overflow-y: scroll;
+  gap: 6px;
+  padding: 5px;
+  background-color: #000;
+  margin-top: 5px;
+}
+
+.taskbarmenu_notif {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #262626;
+  border-radius: 5px;
+  padding: 0px 5px;
+}
+
+.taskbarmenu_notif {
+  border-bottom: 1px solid var(--orange);
+}
+
+.taskbarmenu_notif img {
+  width: 10%;
+  height: auto;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  min-height: 25%;
+  max-height: 50%;
+  position: absolute;
+  left: 1%;
+  right: 1%;
+  top: var(--topBarHeight);
+  background-color: black;
+  transition: all 0.2s ease-in-out;
+  border: 3px solid var(--orange);
+  border-bottom-width: 4px;
+  border-top-width: 0px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  padding: 5px;
+}
+
+.devices_list {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.known_devices {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.bluetooth_device {
+  display: flex;
+  flex-direction: column;
+  background-color: #202020;
+  border: 2px solid #101010;
+  border-radius: 10px;
+  padding: 5px 15px;
+  margin: 0px 5px;
+  flex-grow: 1;
+}
+
+.bt_dev_mini {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.bluetooth_device:hover {
+  border-color: var(--orange);
+}
+
+.bluetooth_device img {
+  width: 12%;
+  height: auto;
+}
+
+.bt_dev_button {
+  all: unset;
+  padding: 0px 30px;
+  background-color: #101010;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+  font-size: 22px;
+  border: 1px solid #202020;
+}
+
+.bt_dev_button:hover {
+  border-color: #ee3030;
+  color: #ee3030;
+}
+
+.bt_dev_maxi {
+  visibility: visible;
+  transition: all 0.2s ease-in-out;
+}
+
+.bt_dev_maxi.hide {
+  visibility: hidden;
+  height: 0px;
+}
+
+.modal.hide {
+  top: -30%;
+  border: none;
+}
+
+.dockbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 5px;
+  background-color: black;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.dockbar_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0 10px;
+  width: 30%;
+}
+
+.dockbar_button img {
+  width: 60px;
+  height: 60px
+}
+
+.vol_slider {
+  background-color: #252525;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.volume_indicator {
+  width: 100px;
+  color: #fff;
+}
+
+.dockbar_vol_button {
+  background: none;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+}
+
+.dockbar_vol_button img {
+  width: 70px;
+  height: 70px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 90px;
+  height: 5px;
+  outline: none;
+  margin-bottom: 7px;
+}
+
+.slider::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #2f2f2f;
+  height: 50%;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--orange);
+  margin: -5px 0px;
+}
+
+.slider::-ms-thumb {
+  margin: 0;
+}
+
+.dockbar_section {
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
 
 .text_orange {

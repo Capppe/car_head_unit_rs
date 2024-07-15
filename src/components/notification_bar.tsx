@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface NotificationBarProps {
   header: string;
   content: string;
   imgSrc: string;
-  barVisible: boolean;
-  toggleBarVisible: Function;
 }
 
-export const NotificationBar: React.FC<NotificationBarProps> = ({ barVisible, toggleBarVisible, header, content, imgSrc }) => {
+export const NotificationBar: React.FC<NotificationBarProps> = ({ header, content, imgSrc }) => {
+  const [barVisible, setBarVisible] = useState(false);
+
+  const showNotif = () => {
+    setBarVisible(true);
+  }
+
+  const hideNotif = () => {
+    setBarVisible(false);
+  }
+
   return (
-    <div className={barVisible ? "top" : "top invisible"} id="top_div" onClick={() => { toggleBarVisible(); }}>
+    <div className={barVisible ? "top" : "top invisible"} id="top_div">
       <div className="" id="notification_container" >
         <div id="notification_icon">
           <img src={`./src/assets/icons/${imgSrc}`} alt="notification image" id="notif_image" />
