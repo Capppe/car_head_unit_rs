@@ -1,5 +1,4 @@
 @import "./colors.css";
-@import url("./NotifTemplates.css");
 
 :root {
   --topBarHeight: 40px;
@@ -17,15 +16,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  width: 100%;
-  height: 100%;
 }
 
 body,
 html {
   padding: 0;
   margin: 0;
-  padding-top: calc(var(--topBarHeight) - 10px);
 }
 
 img {
@@ -33,53 +29,25 @@ img {
   height: auto;
 }
 
-.container,
-.row,
-.col,
-.main_layout {
-  display: flex;
-  gap: 10px;
-}
-
-.expand {
-  justify-content: space-between;
-}
-
-.center {
-  align-items: center;
-  justify-content: center;
-}
-
 .container {
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .row {
+  display: flex;
   flex-direction: row;
-}
-
-.grid5 {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 10px;
 }
 
-.col {
-  flex-direction: column;
-}
-
-.row.s-b {
-  justify-content: space-between;
-}
-
 .main_layout {
-  overflow: hidden;
-  overflow-y: scroll;
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   margin: 5px;
 }
 
@@ -126,21 +94,6 @@ button.none {
   display: flex;
 }
 
-button.big {
-  width: 200px;
-  font-size: 22px;
-}
-
-input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  size: 20px;
-}
-
-label {
-  font-size: 20px;
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;
@@ -181,6 +134,7 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
   z-index: 100;
   background-color: #353535;
   height: 30%;
@@ -195,6 +149,7 @@ label {
 #notification_container {
   display: flex;
   flex-direction: row;
+  /* justify-content: space-between; */
   align-items: center;
   padding: 0px 40px;
   width: 100%;
@@ -247,16 +202,20 @@ label {
 }
 
 .dropdown {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: var(--topBarHeight);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 5px;
   background-color: black;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+  height: inherit;
+  padding: 0px 10px;
+}
+
+#taskbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: black;
+  max-height: 40px;
+  height: var(--topBarHeight);
+  padding: 0px 10px;
 }
 
 .taskbar_group {
@@ -264,8 +223,7 @@ label {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding-right: 10px;
+  gap: 10px
 }
 
 .taskbar_statuses {
@@ -315,6 +273,8 @@ label {
 .taskbarmenu_notifs_container {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  overflow-y: scroll;
   gap: 6px;
   padding: 5px;
   background-color: #000;
@@ -359,6 +319,18 @@ label {
   padding: 5px;
 }
 
+.devices_list {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.device_view {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
 .device_list_buttons {
   display: flex;
   align-items: center;
@@ -374,10 +346,61 @@ label {
   padding: 20px 50px;
 }
 
-.device_list_button.currentView {
-  border: 2px solid var(--orange);
-  color: var(--orange);
-  opacity: .8;
+.bluetooth_device {
+  display: flex;
+  flex-direction: column;
+  background-color: #202020;
+  border: 2px solid #101010;
+  border-radius: 10px;
+  padding: 5px 15px;
+  margin: 0px 5px;
+  flex-grow: 1;
+}
+
+.bt_dev_mini {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.bluetooth_device:hover {
+  border-color: var(--orange);
+}
+
+.bluetooth_device img {
+  width: 12%;
+  height: auto;
+}
+
+.bt_dev_button {
+  all: unset;
+  padding: 0px 30px;
+  background-color: #101010;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+  font-size: 22px;
+  border: 1px solid #202020;
+}
+
+.bt_dev_button:hover {
+  border-color: #ee3030;
+  color: #ee3030;
+}
+
+.bt_dev_maxi {
+  visibility: visible;
+  transition: all 0.2s ease-in-out;
+}
+
+.bt_dev_maxi.hide {
+  visibility: hidden;
+  height: 0px;
 }
 
 .modal.hide {
@@ -389,14 +412,12 @@ label {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 5px;
   background-color: black;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-  z-index: 100;
 }
 
 .dockbar_button {
@@ -405,33 +426,19 @@ label {
   justify-content: center;
   border: none;
   background: none;
-  padding: 0px;
+  padding: 0;
   margin: 0 10px;
+  width: 30%;
 }
 
 .dockbar_button img {
-  width: 75px;
-  height: 75px
-}
-
-#dockbar_powerButton {
-  padding: 5px 15px;
-}
-
-#dockbar_powerButton img {
-  width: 75px;
-  height: 75px;
-}
-
-#dockbar_settingsButton img {
-  width: 75px;
-  height: 75px;
+  width: 60px;
+  height: 60px
 }
 
 .vol_slider {
   background-color: #252525;
-  border-radius: 20px;
-  padding: 0px 15px;
+  border-radius: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -439,7 +446,7 @@ label {
 }
 
 .volume_indicator {
-  width: 150px;
+  width: 100px;
   color: #fff;
 }
 
@@ -458,7 +465,7 @@ label {
 .slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 140px;
+  width: 90px;
   height: 5px;
   outline: none;
   margin-bottom: 7px;
@@ -488,23 +495,7 @@ label {
 .dockbar_section {
   display: flex;
   align-items: center;
-}
-
-.dockbar_left {
   flex: 1;
-}
-
-.dockbar_middle {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.dockbar_right {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
 }
 
 .text_orange {
@@ -529,15 +520,6 @@ label {
 
 .text24 {
   font-size: 24px;
-}
-
-.img_flip {
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-}
-
-.border {
-  border: 1px solid red;
 }
 
 .invisible {

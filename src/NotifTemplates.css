@@ -1,0 +1,21 @@
+#powerMenuButtons {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+#powerMenuButtons button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  text-align: center;
+  padding: 16px;
+  font-size: 20px;
+  width: 180px;
+}
+
+#powerMenuButtons button img {
+  width: 36px;
+  height: 36px;
+}

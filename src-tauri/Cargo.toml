@@ -11,13 +11,17 @@ edition = "2021"
 tauri-build = { version = "1", features = [] }
 
 [dependencies]
-tauri = { version = "1", features = ["shell-open"] }
+tauri = { version = "1", features = [ "http-all", "shell-open"] }
 serde = { version = "1", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
+async-channel = "2.3.1"
 serde_json = "1"
 
 [dependencies.bt_wrapper]
 path = "../../../rust/libs/bt_wrapper"
+
+[dependencies.serial_rs]
+path = "../../../rust/libs/serial_rs"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

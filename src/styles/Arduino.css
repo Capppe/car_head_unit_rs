@@ -1,0 +1,13 @@
+@import "../colors.css";
+
+.arduino {
+  gap: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 25px;
+  background-color: var(--background_second);
+}
+
+.arduino:hover {
+  border: 1px solid var(--orange);
+}

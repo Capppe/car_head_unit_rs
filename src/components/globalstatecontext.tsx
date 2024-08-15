@@ -1,6 +1,8 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { getNetworkStatus } from "../utils/network";
 import { getBluetoothStatus } from "../utils/bluetooth";
+import { MusicPlayerStatus } from "../utils/music";
+import { getMusicStatus } from "../utils/music";
 
 export interface Notification {
   imgSrc: string;
@@ -16,9 +18,11 @@ export interface GlobalState {
   btConnected?: boolean;
   btDiscovering?: boolean;
   btDevName: string;
+  musicStatus: MusicPlayerStatus,
   currentTime: string;
   missedNotifs: [Notification] | [];
   noOfMissedNotifs: number;
+  showNotif?: (content: React.JSX.Element, timeout: number) => void;
 }
 
 interface GlobalStateContextType {
@@ -33,9 +37,18 @@ const defaultState: GlobalState = {
   btConnected: false,
   btDiscovering: false,
   btDevName: "",
+  musicStatus: {
+    is_playing: false,
+    title: "",
+    artist: "",
+    album: "",
+    album_url: "",
+    length: 0,
+  },
   currentTime: "",
   missedNotifs: [],
   noOfMissedNotifs: 0,
+  showNotif: () => { }
 }
 
 const GlobalStateContext = createContext<GlobalStateContextType | undefined>(undefined);
@@ -52,13 +65,22 @@ export const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
       const date = new Date();
       const networkStatus = await getNetworkStatus();
       const bluetoothStatus = await getBluetoothStatus();
+      const musicStatus = await getMusicStatus();
 
-      setState({
-        networkConnected: networkStatus.connected, networkName: networkStatus.devName,
-        btPowered: bluetoothStatus.powered, btConnected: bluetoothStatus.connectedDevices !== 0, btDevName: "", btDiscovering: bluetoothStatus.discovering,
+      setState(prevState => ({
+        ...prevState,
+        networkConnected: networkStatus.connected,
+        networkName: networkStatus.devName,
+        btPowered: bluetoothStatus.powered,
+        btConnected: bluetoothStatus.connectedDevices !== 0,
+        btDiscovering: bluetoothStatus.discovering,
+        btDevName: "",
+        musicStatus: musicStatus,
         currentTime: `${date.getHours()}:${date.getMinutes()}`,
-        missedNotifs: [], noOfMissedNotifs: 0,
-      });
+        missedNotifs: [],
+        noOfMissedNotifs: 0,
+        showNotif: prevState.showNotif
+      }));
     }
     updateStatus();
 

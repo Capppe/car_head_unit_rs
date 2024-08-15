@@ -1,47 +1,54 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useGlobalState } from "./globalstatecontext";
+import { NormalNotif } from "./notification_templates/normal_notif";
 
-interface NotificationBarProps {
-  header: string;
-  content: string;
-  imgSrc: string;
+interface NotificationProps {
+  content: React.JSX.Element;
+  timeout: number;
 }
 
-export const NotificationBar: React.FC<NotificationBarProps> = ({ header, content, imgSrc }) => {
+export const NotificationBar = () => {
+  const [content, setContent] = useState<NotificationProps>({
+    content: <NormalNotif imgSrc="" header="" content="" />,
+    timeout: 0,
+  });
   const [barVisible, setBarVisible] = useState(false);
 
-  const showNotif = () => {
+  const timer = useRef<number>();
+
+  const { state, setState } = useGlobalState();
+
+  useEffect(() => {
+    console.log("Initializing showNotif");
+    setState({
+      ...state,
+      showNotif: (c: React.JSX.Element, t: number) => showNotif(c, t)
+    });
+
+    return () => {
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
+    };
+  }, []);
+
+  const showNotif = useCallback((content: React.JSX.Element, timeout: number) => {
+    setContent({ content, timeout })
     setBarVisible(true);
-  }
+
+    if (timer.current) {
+      clearInterval(timer.current);
+    }
+    timer.current = setInterval(() => hideNotif(), timeout);
+  }, []);
 
   const hideNotif = () => {
     setBarVisible(false);
   }
 
   return (
-    <div className={barVisible ? "top" : "top invisible"} id="top_div">
-      <div className="" id="notification_container" >
-        <div id="notification_icon">
-          <img src={`./src/assets/icons/${imgSrc}`} alt="notification image" id="notif_image" />
-        </div>
-
-        <div id="notification_text_container">
-          <div id="notification_header">
-            <h3 className="notif_text" id="notif_header">{header}</h3>
-          </div>
-          <div id="notification_text">
-            <h5 className="notif_text" id="notif_content">{content}</h5>
-          </div>
-        </div>
-
-        <div id="notification_actions_container">
-          <button type="button" className="button" id="action_button_1">
-            Action 1
-          </button>
-          <button type="button" className="button" id="action_button_2">
-            Action 2
-          </button>
-        </div>
-      </div >
+    <div className={barVisible ? "top" : "top invisible"} id="top_div" onClick={() => hideNotif()}>
+      {content.content}
     </div >
   );
 }

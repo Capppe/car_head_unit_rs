@@ -1,0 +1,72 @@
+@import "../colors.css";
+
+.song-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #1f1f1f;
+  margin-top: 5%;
+  padding: 10px 0px;
+  border-radius: 15px;
+  border: 2px solid var(--orange);
+}
+
+.song-info-container {
+  gap: 10px;
+  justify-content: center;
+  width: 40%;
+  border-radius: 10px;
+}
+
+.song-row {
+  align-items: center;
+  gap: 50px;
+  padding: 5px 15px;
+}
+
+.song-row h4,
+.song-row h2 {
+  display: inline;
+}
+
+.song-row img {
+  object-fit: contain;
+  width: 6%;
+}
+
+.album-container {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.album-container img {
+  object-fit: contain;
+  width: 70%;
+  height: 50%;
+}
+
+.song-slider {
+  width: 60%;
+  height: 12px;
+  align-self: center;
+  justify-self: center;
+}
+
+.slider-row {
+  align-items: center;
+  justify-content: center;
+}
+
+.music-control {
+  padding: 10px;
+}
+
+.music-control-btn {
+  padding: 20px;
+}
+
+.music-control-btn img {
+  width: 20%;
+}
