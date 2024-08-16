@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getDockImg } from "../../utils/utils";
+import { getDockImg } from "../../utils/image_utils";
 import { invoke } from "@tauri-apps/api/tauri";
 
 export const VolumeSlider = () => {

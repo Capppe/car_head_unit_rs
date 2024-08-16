@@ -1,7 +1,7 @@
 import React, { LegacyRef } from "react";
 import { TaskbarMenuButton } from "./taskbarmenu_button";
 import { Notification, useGlobalState } from "../globalstatecontext";
-import { getBtImgUrl, getNetImgUrl } from "../../utils/utils";
+import { getBtImgUrl, getNetImgUrl } from "../../utils/image_utils";
 import { TaskbarMenuNotif } from "./taskbarmenu_notif";
 
 interface TaskbarMenuProps {

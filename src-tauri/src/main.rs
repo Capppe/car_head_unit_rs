@@ -43,13 +43,15 @@ impl BluetoothManager {
 }
 
 pub struct ArduinoManager {
-    pub cancel_sender: Option<Sender<Vec<u8>>>,
+    pub cancel_sender: Option<Sender<()>>,
+    pub cancel_reader: Option<Sender<()>>,
 }
 
 impl ArduinoManager {
     async fn new() -> Self {
         Self {
             cancel_sender: None,
+            cancel_reader: None,
         }
     }
 }

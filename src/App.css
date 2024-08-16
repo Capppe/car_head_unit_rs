@@ -73,6 +73,10 @@ img {
   justify-content: space-between;
 }
 
+.col.left {
+  justify-content: flex-start;
+}
+
 .main_layout {
   overflow: hidden;
   overflow-y: scroll;

@@ -1,6 +1,6 @@
 import { DropDown } from "./dropdown";
 import { useGlobalState } from "../globalstatecontext";
-import { getBtImgUrl, getNetImgUrl } from "../../utils/utils";
+import { getBtImgUrl, getNetImgUrl } from "../../utils/image_utils";
 
 export const Taskbar: React.FC = () => {
   const imgPath = "./src/assets/icons/taskbar/";

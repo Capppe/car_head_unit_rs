@@ -11,3 +11,15 @@
 .arduino:hover {
   border: 1px solid var(--orange);
 }
+
+.arduino-output {
+  background-color: black;
+  padding: 0px 30px;
+  max-height: 60vh;
+  min-width: 80vw;
+  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+}

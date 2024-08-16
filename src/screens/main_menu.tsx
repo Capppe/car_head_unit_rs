@@ -5,7 +5,7 @@ import { InternetRadioWindow } from "./internet_radio";
 import { MusicWindow } from "./music";
 import { NavigationWindow } from "./navigation";
 import { RadioWindow } from "./radio";
-import { getMainImgUrl } from "../utils/utils";
+import { getMainImgUrl } from "../utils/image_utils";
 import { ArduinoManagerWindow } from "./arduino_mgr";
 
 interface MainMenuProps {

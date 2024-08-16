@@ -1,4 +1,5 @@
 use core::str;
+use std::io::Write;
 
 use serde::{Deserialize, Serialize};
 
@@ -81,22 +82,36 @@ pub async fn start_listen_to_board(
 ) -> Result<(), String> {
     let mut manager = state.lock().await;
     let (sender, mut receiver) = channel(1);
+    let (cancel_sender, mut cancel_receiver) = channel(1);
+    let (cancel_sender2, mut cancel_receiver2) = channel(1);
 
-    manager.cancel_sender = Some(sender.clone());
+    manager.cancel_sender = Some(cancel_sender.clone());
+    manager.cancel_reader = Some(cancel_sender2.clone());
 
     spawn(async move {
-        let _ = read_from_port(port, baud_rate, sender).await;
+        tokio::select! {
+            _ = read_from_port(port, baud_rate, sender) => {},
+            _ = cancel_receiver2.recv() => {
+                println!("Reading thread stopped");
+                return;
+            }
+        }
     });
-
-    while let Some(resp) = receiver.recv().await {
-        let parts = String::from_utf8(resp);
-        println!("Pars: {:?}", parts);
-        emit_to_frontend(
-            "arduino-message",
-            parts.unwrap_or("".to_string()),
-            app_handle.clone(),
-        );
-    }
+    spawn(async move {
+        loop {
+            tokio::select! {
+                Some(resp) = receiver.recv() => {
+                    let parts = String::from_utf8(resp).unwrap_or("".to_string());
+                    println!("Parts: {}", parts);
+                    emit_to_frontend("arduino-message", parts, app_handle.clone());
+                },
+                    _ = cancel_receiver.recv() => {
+                    println!("Sender thread stopped");
+                    return;
+                }
+            }
+        }
+    });
 
     println!("Returning from ardu");
 
@@ -106,10 +121,18 @@ pub async fn start_listen_to_board(
 #[tauri::command]
 pub async fn stop_listen_to_board(state: State<'_, SharedArduinoManager>) -> Result<(), String> {
     let mut manager = state.lock().await;
+    let cancel_str = "Exit_listener";
+
+    let mut buffer = [0; 32];
+    let mut cancel: &mut [u8] = &mut buffer;
+    cancel.write(cancel_str.as_bytes()).unwrap();
 
     println!("Stopping arduino listener");
     if let Some(tx) = manager.cancel_sender.take() {
-        let _ = tx.send(Vec::new());
+        let _ = tx.send(());
+    }
+    if let Some(tx) = manager.cancel_reader.take() {
+        let _ = tx.send(());
     }
     Ok(())
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BluetoothDevice } from "../../screens/bluetooth";
-import { getBtDevImgUrl } from "../../utils/utils";
+import { getBtDevImgUrl } from "../../utils/image_utils";
 import { connectToDevice, disconnectFromDevice } from "../../utils/bluetooth";
 import { useGlobalState } from "../globalstatecontext";
 import { BtDevStatusNotif } from "../notification_templates/bt_device_status";

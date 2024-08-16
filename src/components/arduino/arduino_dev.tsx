@@ -1,6 +1,6 @@
 import React from "react";
 import { Port } from "../../screens/arduino_mgr";
-import { getArduinoImgUrl } from "../../utils/utils";
+import { getArduinoImgUrl } from "../../utils/image_utils";
 import "../../styles/Arduino.css";
 
 interface ArduinoDeviceProps {

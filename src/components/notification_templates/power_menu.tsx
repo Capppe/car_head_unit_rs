@@ -1,4 +1,4 @@
-import { getDockImg } from "../../utils/utils";
+import { getDockImg } from "../../utils/image_utils";
 
 export const PowerMenu = () => {
 

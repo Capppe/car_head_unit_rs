@@ -1,5 +1,6 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { getMusicImgUrl, removeQuotes, secToMinSec } from "../../utils/utils";
+import React, { useEffect, useRef, useState } from "react";
+import { getMusicImgUrl } from "../../utils/image_utils";
+import { removeQuotes, secToMinSec } from "../../utils/utils";
 import '../../styles/MusicInfo.css';
 import { invoke } from "@tauri-apps/api/tauri";
 

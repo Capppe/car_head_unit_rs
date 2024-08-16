@@ -49,10 +49,11 @@ export const ArduinoManagerWindow = () => {
   }
 
   const stopMonitor = () => {
-    setShowMonitor(false);
-    setCurrentBoard(undefined);
+    // setShowMonitor(false);
+    // setCurrentBoard(undefined);
   }
 
+  //Crazy-looking react code below
   return (
     <div className="col center">
       {boards.length > 0 ? (
@@ -64,7 +65,7 @@ export const ArduinoManagerWindow = () => {
             !showMonitor ? (
               "Select board to listen to:"
             ) : (
-              `Listening to '${currentBoard?.name}' on '${currentBoard?.port.label}'`
+              `Listening to '${currentBoard?.name}' on '${currentBoard?.port.label}':`
             )
           )}</div>
           <div className="col">
@@ -76,7 +77,7 @@ export const ArduinoManagerWindow = () => {
           </div>
         </div>
       ) : (
-        <div>{!scanning && "No boards found!"}</div>
+        <div>{!showMonitor && !scanning && "No boards found!"}</div>
       )}
 
       <div>

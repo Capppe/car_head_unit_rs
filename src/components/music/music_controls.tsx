@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
-import { getMusicImgUrl } from "../../utils/utils"
+import { getMusicImgUrl } from "../../utils/image_utils"
 import React from "react";
 
 interface MusicControlProps {
