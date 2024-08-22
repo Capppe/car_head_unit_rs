@@ -198,6 +198,7 @@ dependencies = [
 [[package]]
 name = "bt_wrapper"
 version = "0.1.0"
+source = "git+https://github.com/capppe/bluez_wrapper_rs.git#802d2dbadadffa5f52e50b052e422d21bd9fd0cf"
 dependencies = [
  "async-channel",
  "dbus",
@@ -2712,6 +2713,7 @@ dependencies = [
 [[package]]
 name = "serial_rs"
 version = "0.1.0"
+source = "git+https://github.com/capppe/serial_rs.git#2791cb8dded2ed11a918e71690712674c3a19e84"
 dependencies = [
  "async-channel",
  "libc",
