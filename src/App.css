@@ -3,6 +3,7 @@
 
 :root {
   --topBarHeight: 40px;
+  --dockBarHeight: 80px;
 
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -17,15 +18,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  width: 100%;
-  height: 100%;
 }
 
 body,
 html {
+  width: 100%;
+  height: calc(100% - var(--dockBarHeight));
   padding: 0;
   margin: 0;
-  padding-top: calc(var(--topBarHeight) - 10px);
+  margin-top: calc(var(--topBarHeight) - 10px);
 }
 
 img {
@@ -45,6 +46,18 @@ img {
   justify-content: space-between;
 }
 
+.widest {
+  width: 100%;
+}
+
+.margined {
+  margin: 5px;
+}
+
+.margined10 {
+  margin: 10px;
+}
+
 .center {
   align-items: center;
   justify-content: center;
@@ -59,9 +72,19 @@ img {
   flex-direction: row;
 }
 
+.self-start {
+  align-self: start;
+}
+
 .grid5 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
 }
 
@@ -77,6 +100,55 @@ img {
   justify-content: flex-start;
 }
 
+.custom-select {
+  position: relative;
+  font-family: Arial, sans-serif;
+  background-color: var(--black);
+  border-radius: 10px;
+  border: 1px solid var(--light-black);
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 10px;
+}
+
+.custom-select:hover {
+  border-color: var(--orange);
+}
+
+.custom-select .arrow {
+  border: solid #333;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  margin-bottom: 5px;
+  transform: rotate(45deg);
+  transition: transform 0.2s;
+}
+
+.custom-select .arrow.open {
+  margin-top: 5px;
+  transform: rotate(-135deg);
+}
+
+.custom-select .options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--light-black);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-height: 150px;
+  overflow-y: scroll;
+  z-index: 1000;
+}
+
+.custom-select .options:hover {
+  background-color: var(--black);
+}
+
 .main_layout {
   overflow: hidden;
   overflow-y: scroll;
@@ -85,6 +157,7 @@ img {
   justify-content: center;
   align-items: center;
   margin: 5px;
+  height: 100%;
 }
 
 h1 {
@@ -92,7 +165,8 @@ h1 {
 }
 
 input,
-button {
+button,
+select {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -103,6 +177,11 @@ button {
   background-color: #ffffff;
   transition: border-color 0.25s;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+select {
+  padding: 0px;
+  font-size: 20px;
 }
 
 button {
@@ -515,6 +594,10 @@ label {
   color: var(--orange);
 }
 
+.text_red {
+  color: var(--red);
+}
+
 .text_bold {
   font-weight: 600;
 }
@@ -533,6 +616,22 @@ label {
 
 .text24 {
   font-size: 24px;
+}
+
+.text26 {
+  font-size: 26px;
+}
+
+.text28 {
+  font-size: 28px;
+}
+
+.text30 {
+  font-size: 30px;
+}
+
+.text40 {
+  font-size: 40px;
 }
 
 .img_flip {

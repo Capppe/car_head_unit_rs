@@ -1,3 +1,5 @@
+import { invoke } from "@tauri-apps/api/tauri";
+
 export const removeQuotes = (str: string) => {
   return str.replace(/(^"|"$|^'|'$)/g, '');
 }
@@ -19,4 +21,9 @@ export const getFormattedTime = () => {
   } else {
     return `${hours.toString()}:${minutes.toString()}`;
   }
+}
+
+export const getSettings = async (file: string) => {
+  const settingsFile = await invoke('get-settings', { file });
+  return settingsFile;
 }

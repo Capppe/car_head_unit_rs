@@ -15,7 +15,7 @@ interface MainMenuProps {
 export const MainMenu: React.FC<MainMenuProps> = ({ changeWindow }) => {
   const src = "./src/assets/icons";
   return (
-    <div className="col">
+    <div className="col self-start">
       <div className="grid5">
         <ImageButton id="music_button" imgSrc={`${src}/music.svg`} text="Music" onClick={() => changeWindow(<MusicWindow />)} />
         <ImageButton id="bluetooth_button" imgSrc={`${src}/bluetooth.svg`} text="Bluetooth" onClick={() => changeWindow(<BluetoothWindow />)} />

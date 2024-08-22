@@ -21,7 +21,7 @@ const App = () => {
 
   return (
     <GlobalStateProvider>
-      <div>
+      <div style={{ height: '100%' }}>
         <NotificationBar />
         <Taskbar />
         <MainContainer child_element={currentElement} />

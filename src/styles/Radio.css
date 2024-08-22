@@ -1,0 +1,22 @@
+.fm-display {
+  background-color: var(--light-black);
+  border: 5px solid var(--orange);
+  border-radius: 15px;
+  margin: 15px 0px;
+}
+
+.radio-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 93%;
+  height: 25px;
+  outline: none;
+  margin: 15px 0px;
+}
+
+.radio-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+}

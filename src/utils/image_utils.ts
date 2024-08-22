@@ -7,6 +7,7 @@ const dockbarIconPath = `${iconPath}dockbar/`;
 const musicIconPath = `${iconPath}music/`;
 const mainPath = `${iconPath}main/`;
 const arduinoPath = `${iconPath}arduino/`;
+const radioPath = `${iconPath}radio/`;
 
 
 export const getDockImg = (icon: string) => {
@@ -51,4 +52,9 @@ export const getMainImgUrl = (icon: string) => {
 export const getArduinoImgUrl = (icon: string) => {
   if (icon === null || icon === 'null') { return "" }
   return `${arduinoPath}${icon}.svg`;
+}
+
+export const getRadioImgUrl = (icon: string) => {
+  if (icon === null || icon === 'null') { return "" }
+  return `${radioPath}${icon}.svg`;
 }

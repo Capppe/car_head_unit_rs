@@ -23,6 +23,7 @@ export type Board = {
   name: string,
   fqbn: string,
   port: Port,
+  is_arduino: Boolean,
 }
 
 export const ArduinoManagerWindow = () => {
@@ -49,13 +50,14 @@ export const ArduinoManagerWindow = () => {
   }
 
   const stopMonitor = () => {
-    // setShowMonitor(false);
-    // setCurrentBoard(undefined);
+    setShowMonitor(false);
+    setCurrentBoard(undefined);
   }
 
   //Crazy-looking react code below
+  //TODO cleanup
   return (
-    <div className="col center">
+    <div className="col center self-start">
       {boards.length > 0 ? (
         <div className="col center">
 
@@ -68,7 +70,7 @@ export const ArduinoManagerWindow = () => {
               `Listening to '${currentBoard?.name}' on '${currentBoard?.port.label}':`
             )
           )}</div>
-          <div className="col">
+          <div className="col" style={{ height: '100%' }}>
             {!showMonitor ? (boards && boards.map((b, i) => (
               <ArduinoDevice key={i} name={b.name} fqbn={b.fqbn} port={b.port} onClick={() => { startMonitor(b); }} />
             ))) : (
