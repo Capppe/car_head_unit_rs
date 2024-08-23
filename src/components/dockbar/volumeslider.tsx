@@ -4,7 +4,6 @@ import { invoke } from "@tauri-apps/api/tauri";
 
 export const VolumeSlider = () => {
   const [volume, setVolume] = useState(50);
-
   const [volChanged, setVolChanged] = useState(false);
 
   const timer = useRef<number | null>();
@@ -52,7 +51,7 @@ export const VolumeSlider = () => {
   return (
     <div className="vol_slider">
       <button className="dockbar_vol_button" onClick={() => decrVolume()}>
-        <img src={getDockImg("volume-down.svg")} alt="VolDown" />
+        <img src={getDockImg('volume-down')} alt="VolDown" />
       </button>
 
       <div>
@@ -71,7 +70,7 @@ export const VolumeSlider = () => {
       </div>
 
       <button className="dockbar_vol_button" onClick={() => incrVolume()}>
-        <img src={getDockImg("volume-up.svg")} alt="VolUp" />
+        <img src={getDockImg("volume-up")} alt="VolUp" />
       </button>
     </div>
   );

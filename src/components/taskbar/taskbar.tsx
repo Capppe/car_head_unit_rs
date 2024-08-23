@@ -1,11 +1,9 @@
 import { DropDown } from "./dropdown";
 import { useGlobalState } from "../globalstatecontext";
-import { getBtImgUrl, getNetImgUrl } from "../../utils/image_utils";
+import { getBtImgUrl, getDockImg, getNetImgUrl, getTaskBarImg } from "../../utils/image_utils";
 
 export const Taskbar: React.FC = () => {
-  const imgPath = "./src/assets/icons/taskbar/";
-
-  const { state, setState } = useGlobalState();
+  const { state } = useGlobalState();
 
   return (
     <DropDown>
@@ -15,13 +13,13 @@ export const Taskbar: React.FC = () => {
         </div>
       </div>
 
-      <img style={{ width: "100%", height: "inherit", objectFit: "fill", zIndex: "1", position: "absolute", left: "0%", right: "0%" }} src="./src/assets/icons/taskbar/bg.svg" />
+      <img style={{ width: "100%", height: "inherit", objectFit: "fill", zIndex: "1", position: "absolute", left: "0%", right: "0%" }} src={getTaskBarImg('bg')} />
 
       <div className="taskbar_group" id="taskbar_right">
         <div className="taskbar_statuses">
           {state.noOfMissedNotifs !== 0 &&
             <div className="taskbar_img">
-              <img src={`${imgPath}notif.svg`} />
+              <img src={getDockImg('notif')} />
             </div>
           }
           <div className="taskbar_img">

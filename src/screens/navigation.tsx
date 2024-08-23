@@ -2,7 +2,7 @@ import { useGlobalState } from "../components/globalstatecontext";
 import { WebView } from "../components/navigation/webview";
 
 export const NavigationWindow = () => {
-  const { state, setState } = useGlobalState();
+  const { state } = useGlobalState();
   return (
     <div>
       {state.networkConnected ? (

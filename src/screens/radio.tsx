@@ -4,9 +4,9 @@ import "../styles/Radio.css";
 
 export const RadioWindow = () => {
   const [currFm, setCurrFm] = useState(93.5);
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<string>("Pink Floyd - Dogs");
-  const [currentStation, setCurrentStation] = useState<string>("Radio Vega");
-  const [seeking, setSeeking] = useState<boolean>(false);
+  const [currentlyPlaying, _setCurrentlyPlaying] = useState<string>("Pink Floyd - Dogs");
+  const [currentStation, _setCurrentStation] = useState<string>("Radio Vega");
+  const [seeking, _setSeeking] = useState<boolean>(false);
 
   return (
     <div>

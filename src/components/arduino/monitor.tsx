@@ -4,7 +4,7 @@ import { Board } from "../../screens/arduino_mgr";
 import { invoke } from "@tauri-apps/api/tauri";
 import { getFormattedTime } from "../../utils/utils";
 import { Dropdown } from "../generic/dropdown";
-import { BaudRates, CustomDropdownOption } from "../../utils/constants";
+import { BaudRates } from "../../utils/constants";
 
 interface ArduinoMonitorProps {
   board?: Board;

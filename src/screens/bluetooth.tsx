@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BluetoothDeviceComp } from "../components/bluetooth/device";
 import { startDiscovery } from "../utils/bluetooth";
 import { listen } from "@tauri-apps/api/event";
@@ -22,7 +22,7 @@ export const BluetoothWindow: React.FC = () => {
   const [pairedDevices, setPairedDevices] = useState<BluetoothDevice[]>([]);
   const [foundDevices, setFoundDevices] = useState<BluetoothDevice[]>([]);
 
-  const { state, setState } = useGlobalState();
+  const { state } = useGlobalState();
 
   useEffect(() => {
     invoke<[BluetoothDevice]>("get_known_devices").then((devices => {

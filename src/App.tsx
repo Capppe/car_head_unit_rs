@@ -6,7 +6,6 @@ import { MainMenu } from "./screens/main_menu";
 import { Taskbar } from "./components/taskbar/taskbar";
 import { GlobalStateProvider } from "./components/globalstatecontext";
 import { DockBar } from "./components/dockbar/dockbar";
-import { invoke } from "@tauri-apps/api/tauri";
 
 const App = () => {
   const changeWindow = (elem: React.JSX.Element) => {

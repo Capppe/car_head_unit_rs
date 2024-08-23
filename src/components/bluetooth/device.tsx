@@ -3,16 +3,15 @@ import { BluetoothDevice } from "../../screens/bluetooth";
 import { getBtDevImgUrl } from "../../utils/image_utils";
 import { connectToDevice, disconnectFromDevice } from "../../utils/bluetooth";
 import { useGlobalState } from "../globalstatecontext";
-import { BtDevStatusNotif } from "../notification_templates/bt_device_status";
 import { NormalNotif } from "../notification_templates/normal_notif";
 
-export const BluetoothDeviceComp: React.FC<BluetoothDevice> = ({ name, address: address, icon, paired, connected }) => {
+export const BluetoothDeviceComp: React.FC<BluetoothDevice> = ({ name, address: address, icon }) => {
 
   const [shouldShowInfo, setShouldShowInfo] = useState(false);
   const [connStatus, setConnStatus] = useState<boolean>(false);
   const [disableButton, setDisableButton] = useState<boolean>(false);
 
-  const { state, setState } = useGlobalState();
+  const { state } = useGlobalState();
 
   const handleConnectClick = async () => {
     setDisableButton(true);

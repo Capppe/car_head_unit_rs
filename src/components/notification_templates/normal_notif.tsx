@@ -10,7 +10,7 @@ export const NormalNotif: React.FC<NormalNotifProps> = ({ imgSrc, header, conten
   return (
     <div className="" id="notification_container" >
       <div id="notification_icon">
-        <img src={`./src/assets/icons/${imgSrc}`} alt="notification image" id="notif_image" />
+        <img src={imgSrc} alt="notification image" id="notif_image" />
       </div>
 
       <div id="notification_text_container">

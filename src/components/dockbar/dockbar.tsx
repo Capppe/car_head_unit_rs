@@ -2,6 +2,7 @@ import React from "react";
 import { VolumeSlider } from "./volumeslider";
 import { useGlobalState } from "../globalstatecontext";
 import { PowerMenu } from "../notification_templates/power_menu";
+import { getDockImg } from "../../utils/image_utils";
 
 interface DockBarProps {
   goHome: Function;
@@ -9,7 +10,7 @@ interface DockBarProps {
 
 export const DockBar: React.FC<DockBarProps> = ({ goHome }) => {
 
-  const { state, setState } = useGlobalState();
+  const { state } = useGlobalState();
 
   const showPowerMenu = () => {
     state.showNotif ? state.showNotif(<PowerMenu />, 15000) : console.log("State not initialized!");
@@ -20,7 +21,7 @@ export const DockBar: React.FC<DockBarProps> = ({ goHome }) => {
 
       <div className="dockbar_section dockar_left" id="dockbar_homeButton">
         <button className="dockbar_button" onClick={() => { goHome() }}>
-          <img src="./src/assets/icons/dockbar/home.svg" alt="home" />
+          <img src={getDockImg("home")} alt="home" />
         </button>
         <VolumeSlider />
       </div>
@@ -30,10 +31,10 @@ export const DockBar: React.FC<DockBarProps> = ({ goHome }) => {
 
       <div className="dockbar_section dockar_right">
         <button className="dockbar_button" id="dockbar_powerButton" onClick={() => { showPowerMenu() }}>
-          <img src="./src/assets/icons/dockbar/power.svg" alt="home" />
+          <img src={getDockImg('power')} alt="home" />
         </button>
         <button className="dockbar_button" id="dockbar_settingsButton">
-          <img src="./src/assets/icons/dockbar/settings.svg" alt="home" />
+          <img src={getDockImg('settings')} alt="home" />
         </button>
       </div>
     </div>

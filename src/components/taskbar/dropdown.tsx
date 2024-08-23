@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { TaskbarMenu } from "./taskbarmenu";
 import { useGlobalState } from "../globalstatecontext";
 
@@ -8,7 +8,7 @@ interface DropDownIF {
 
 export const DropDown: React.FC<DropDownIF> = (props: DropDownIF) => {
 
-  const { state, setState } = useGlobalState();
+  const { state } = useGlobalState();
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 

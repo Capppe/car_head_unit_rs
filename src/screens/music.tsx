@@ -5,7 +5,7 @@ import { SongInfo } from "../components/music/song_info";
 import '../styles/MusicInfo.css';
 
 export const MusicWindow = () => {
-  const { state, setState } = useGlobalState();
+  const { state } = useGlobalState();
 
   return (
     <div className="song-container">

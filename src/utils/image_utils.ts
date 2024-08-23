@@ -1,6 +1,6 @@
 import { GlobalState } from "../components/globalstatecontext";
 
-const iconPath = "./src/assets/icons/";
+const iconPath = "icons/";
 const taskbarIconPath = `${iconPath}taskbar/`;
 const btDevIconPath = `${iconPath}bt/`;
 const dockbarIconPath = `${iconPath}dockbar/`;
@@ -9,9 +9,12 @@ const mainPath = `${iconPath}main/`;
 const arduinoPath = `${iconPath}arduino/`;
 const radioPath = `${iconPath}radio/`;
 
-
 export const getDockImg = (icon: string) => {
-  return `${dockbarIconPath}${icon}`;
+  return `${dockbarIconPath}${icon}.svg`;
+}
+
+export const getTaskBarImg = (icon: string) => {
+  return `${taskbarIconPath}${icon}.svg`;
 }
 
 export const getBtImgUrl = (state: GlobalState) => {
@@ -46,6 +49,7 @@ export const getMusicImgUrl = (icon: string) => {
 
 export const getMainImgUrl = (icon: string) => {
   if (icon === null || icon === 'null') { return "" }
+  console.log(`${mainPath}${icon}.svg`);
   return `${mainPath}${icon}.svg`;
 }
 

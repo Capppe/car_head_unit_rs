@@ -11,7 +11,7 @@ interface TaskbarMenuProps {
 }
 
 export const TaskbarMenu: React.FC<TaskbarMenuProps> = ({ ddRef, modalVisible, notifications }) => {
-  const { state, setState } = useGlobalState();
+  const { state } = useGlobalState();
 
   return (
     <div ref={ddRef} className={modalVisible ? "modal" : "modal hide"} id="notifModal">
