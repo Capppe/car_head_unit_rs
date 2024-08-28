@@ -39,6 +39,10 @@ jobs:
             npm install
             # Build the application
             npm run tauri build
+            #Testing
+            ls -la /car_head_unit_rs/src-tauri/target/release/bundle/deb
+            ls /home/runner/
+            find / -type f -name "*arm64.deb*"
       - name: Upload deb bundle
         uses: actions/upload-artifact@v3
         with:
