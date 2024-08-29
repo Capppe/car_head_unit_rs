@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "car_head_unit_react",
+    "productName": "car-head-unit-react",
     "version": "0.0.0"
   },
   "tauri": {
@@ -33,7 +33,7 @@
     },
     "windows": [
       {
-        "title": "car_head_unit_react",
+        "title": "Car Head Unit",
         "width": 800,
         "height": 600
       }
