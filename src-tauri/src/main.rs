@@ -4,9 +4,10 @@
 mod arduino;
 mod bt;
 mod bt_listeners;
-mod hw_control;
+mod hardware;
 mod music;
 mod network;
+mod settings;
 mod signal_handler;
 
 use std::sync::Arc;
@@ -18,12 +19,14 @@ use bt::{
 };
 use bt_listeners::start_device_found_listener;
 use bt_wrapper::bluetooth::Bluetooth;
-use hw_control::{change_volume, get_curr_volume};
+use hardware::audio::sinks::find_sinks;
+use hardware::audio::{audio::change_volume, audio::get_curr_volume};
 use music::{
     get_music_position, get_music_status, next_song, play_pause, prev_song, seek_song,
     start_music_status_listener,
 };
 use network::get_network_status;
+use settings::get_setting;
 use tauri::Manager;
 use tokio::sync::{mpsc::Sender, oneshot, Mutex};
 
@@ -104,6 +107,8 @@ async fn main() {
             get_available_boards,
             start_listen_to_board,
             stop_listen_to_board,
+            find_sinks,
+            get_setting,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

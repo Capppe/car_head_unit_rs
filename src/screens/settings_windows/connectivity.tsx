@@ -19,21 +19,21 @@ export const ConnectivitySettings = () => {
       <SettingsRowLabel title="Connectivity" />
       <SettingsRow
         inputType={SettingsRowType.Switch}
-        setting="bluetooth_on"
+        setting="bluetooth-on"
         title="Bluetooth"
         label="Enable/disable bluetooth"
         onInput={(b: boolean) => toggleBluetooth(b)}
       />
       <SettingsRow
         inputType={SettingsRowType.Switch}
-        setting="wifi_on"
+        setting="wifi-on"
         title="Wifi"
         label="Enable/disable wifi"
         onInput={(b: boolean) => toggleWifi(b)}
       />
       <SettingsRow
         inputType={SettingsRowType.Button}
-        setting="config_radio"
+        setting="config-radio"
         title="Radio"
         btnLabel="Configure"
         label="Configure radio"

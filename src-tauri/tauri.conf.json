@@ -59,7 +59,9 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": []
+      "resources": [
+        "../public/settings/settings.json"
+      ]
     }
   }
 }

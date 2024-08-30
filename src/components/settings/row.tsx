@@ -29,21 +29,6 @@ interface SettingsRowProps {
 }
 
 export const SettingsRow: React.FC<SettingsRowProps> = ({ inputType, title, setting, label, btnLabel, ddOptions, onInput }) => {
-  const [defaultValue, setDefaultValue] = useState<any>();
-
-  useEffect(() => {
-    const getSetting = async () => {
-      switch (inputType) {
-        case SettingsRowType.Switch: setDefaultValue(await getBooleanSetting(setting) || true); break;
-        case SettingsRowType.Slider:
-        case SettingsRowType.DropDown: setDefaultValue(await getNumberSetting(setting) || 0); break;
-        case SettingsRowType.TextInput: setDefaultValue(await getTextSetting(setting) || ""); break;
-        case SettingsRowType.ColorInput: setDefaultValue(await getTextSetting(setting) || "#ffffff"); break;
-      }
-    }
-
-    getSetting();
-  }, []);
 
   return (
     <div className="row settings-row expand" style={{ width: '85%', alignItems: 'center' }}>
@@ -53,17 +38,17 @@ export const SettingsRow: React.FC<SettingsRowProps> = ({ inputType, title, sett
       </div>
       <div>
         {inputType === SettingsRowType.Switch ? (
-          <SettingsSwitch defaultValue={defaultValue} onChange={onInput} />
+          <SettingsSwitch settingName={setting} onChange={onInput} />
         ) : inputType === SettingsRowType.Slider ? (
-          <SettingsSlider defaultValue={defaultValue} max={100} min={0} />
+          <SettingsSlider settingName={setting} max={100} min={0} />
         ) : inputType === SettingsRowType.Button ? (
           <SettingsButton title={btnLabel || ""} onClick={onInput} />
         ) : inputType === SettingsRowType.DropDown ? (
-          <SettingsDropdown defaultValue={defaultValue} options={ddOptions || []} onChange={onInput} />
+          <SettingsDropdown settingName={setting} options={ddOptions || []} onChange={onInput} />
         ) : inputType === SettingsRowType.TextInput ? (
-          <SettingsTextInput defaultValue={defaultValue} />
+          <SettingsTextInput settingName={setting} />
         ) : inputType === SettingsRowType.ColorInput ? (
-          <SettingsColorPicker defaultValue={defaultValue} onChange={onInput} />
+          <SettingsColorPicker settingName={setting} onChange={onInput} />
         ) : (<div />)}
       </div>
     </div>

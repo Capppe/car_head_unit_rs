@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { SettingsRow, SettingsRowType } from "../../components/settings/row";
 import { SettingsRowLabel } from "../../components/settings/rowlabel";
-import { CustomDropdownOption } from "../../utils/constants";
+import { AudioSinks, CustomDropdownOption } from "../../utils/constants";
 import { invoke } from "@tauri-apps/api/tauri";
 
 export const AudioSettings = () => {
@@ -9,15 +9,14 @@ export const AudioSettings = () => {
 
   useEffect(() => {
     const getHardware = async () => {
-      const devices = await invoke<CustomDropdownOption[]>('get_hardware', {
-        name: 'audio-devices',
-      });
+      const devices = await invoke<AudioSinks[]>('find_sinks');
 
+      setAudioDevices([]);
+      for (let device of devices) {
+        setAudioDevices(prev =>
+          [...prev, { label: device.description || device.name, value: device.index }]);
+      }
     }
-    setAudioDevices([
-      { label: 'alsa', value: 0 },
-      { label: 'pulse', value: 1 }
-    ]);
     getHardware();
   }, []);
 

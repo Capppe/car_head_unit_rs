@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getTextSetting } from "../../utils/settings_utils";
 
 interface ColorPickerProps {
-  defaultValue: string;
+  settingName: string;
   onChange: Function;
 }
 
-export const SettingsColorPicker: React.FC<ColorPickerProps> = ({ defaultValue, onChange }) => {
-  const [value, setValue] = useState<string>(defaultValue);
+export const SettingsColorPicker: React.FC<ColorPickerProps> = ({ settingName, onChange }) => {
+  const [value, setValue] = useState<string>("");
+
+  useEffect(() => {
+    const getSetting = async () => {
+      setValue(await getTextSetting(settingName));
+    }
+    getSetting();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);

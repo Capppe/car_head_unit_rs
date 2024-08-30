@@ -18,3 +18,14 @@ export const Languages: CustomDropdownOption[] = [
   { label: "Swedish", value: 1 },
   { label: "Närpesisk", value: 2 },
 ]
+
+export type AudioSinks = {
+  index: number;
+  name: string;
+  description: string;
+}
+
+export type Setting = {
+  name: string;
+  value: number | string | boolean;
+}
