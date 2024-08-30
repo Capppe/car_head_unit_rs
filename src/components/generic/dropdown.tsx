@@ -6,9 +6,10 @@ interface DropdownProps {
   placeholder: string | number;
   label: string;
   onChange: Function;
+  classNames?: string;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ options, placeholder, label, onChange }) => {
+export const Dropdown: React.FC<DropdownProps> = ({ options, placeholder, label, onChange, classNames }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<CustomDropdownOption | null>(null);
 
@@ -18,7 +19,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ options, placeholder, label,
   }
 
   return (
-    <div className="custom-select" onClick={() => setIsOpen(!isOpen)}>
+    <div className={classNames ? classNames : "custom-select"} onClick={() => setIsOpen(!isOpen)}>
       <div>{label}</div>
       <span className="text_orange">{selectedOption ? selectedOption.label : placeholder}</span>
       <div className={`arrow ${isOpen ? 'open' : ''}`}></div>

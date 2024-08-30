@@ -18,6 +18,8 @@ async-channel = "2.3.1"
 serde_json = "1"
 bt_wrapper = { git = "https://github.com/capppe/bluez_wrapper_rs.git" }
 serial_rs = { git = "https://github.com/capppe/serial_rs.git" }
+tauri-build = "1"
+openssl-sys = { version = "0.9", features = ["vendored"] }
 
 # [dependencies.bt_wrapper]
 # path = "../../../rust/libs/bt_wrapper"

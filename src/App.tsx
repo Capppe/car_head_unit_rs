@@ -24,7 +24,7 @@ const App = () => {
         <NotificationBar />
         <Taskbar />
         <MainContainer child_element={currentElement} />
-        <DockBar goHome={showHomeWindow} />
+        <DockBar goHome={showHomeWindow} changeWindow={changeWindow} />
       </div>
     </GlobalStateProvider>
   );

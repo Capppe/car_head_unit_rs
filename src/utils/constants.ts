@@ -12,3 +12,9 @@ export const BaudRates: CustomDropdownOption[] = [
   { label: "76800", value: 76800 },
   { label: "115200", value: 115200 },
 ]
+
+export const Languages: CustomDropdownOption[] = [
+  { label: "English", value: 0 },
+  { label: "Swedish", value: 1 },
+  { label: "Närpesisk", value: 2 },
+]
