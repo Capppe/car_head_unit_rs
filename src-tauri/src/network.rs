@@ -4,6 +4,7 @@ use serde::Serialize;
 
 #[derive(Default, Debug, Serialize)]
 pub struct NetworkStatus {
+    powered: bool,
     connected: Option<bool>,
     dev_name: Option<String>,
 }
@@ -11,8 +12,35 @@ pub struct NetworkStatus {
 impl NetworkStatus {
     fn new() -> Self {
         Self {
+            powered: false,
             connected: Some(false),
             dev_name: Some("Unknown".to_string()),
+        }
+    }
+
+    fn power_off() -> Result<(), String> {
+        match Command::new("nmcli")
+            .arg("radio")
+            .arg("wifi")
+            .arg("off")
+            .output()
+            .map_err(|e| format!("Failed to power off wifi: {}", e))
+        {
+            Ok(_o) => Ok(()),
+            Err(e) => Err(e),
+        }
+    }
+
+    fn power_on() -> Result<(), String> {
+        match Command::new("nmcli")
+            .arg("radio")
+            .arg("wifi")
+            .arg("on")
+            .output()
+            .map_err(|e| format!("Failed to power on wifi: {}", e))
+        {
+            Ok(_o) => Ok(()),
+            Err(e) => Err(e),
         }
     }
 }
@@ -57,4 +85,14 @@ pub fn get_network_status() -> NetworkStatus {
     }
 
     return status;
+}
+
+#[tauri::command]
+pub fn turn_on_wifi() -> Result<(), String> {
+    NetworkStatus::power_on()
+}
+
+#[tauri::command]
+pub fn turn_off_wifi() -> Result<(), String> {
+    NetworkStatus::power_off()
 }

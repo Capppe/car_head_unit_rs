@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { SettingsSwitch } from "./switch";
-import { getBooleanSetting, getNumberSetting, getTextSetting } from "../../utils/settings_utils";
 import "../../styles/Settings.css";
 import { SettingsSlider } from "./slider";
 import { SettingsButton } from "./button";
@@ -20,16 +19,16 @@ export enum SettingsRowType {
 
 interface SettingsRowProps {
   inputType: SettingsRowType;
-  setting: string;
+  settingName: string;
   title: string;
   label?: string | undefined;
   btnLabel?: string | undefined;
   ddOptions?: CustomDropdownOption[];
+  getCurrentValue: Function;
   onInput: Function;
 }
 
-export const SettingsRow: React.FC<SettingsRowProps> = ({ inputType, title, setting, label, btnLabel, ddOptions, onInput }) => {
-
+export const SettingsRow: React.FC<SettingsRowProps> = ({ inputType, title, settingName, label, btnLabel, ddOptions, getCurrentValue, onInput }) => {
   return (
     <div className="row settings-row expand" style={{ width: '85%', alignItems: 'center' }}>
       <div className="col">
@@ -38,17 +37,17 @@ export const SettingsRow: React.FC<SettingsRowProps> = ({ inputType, title, sett
       </div>
       <div>
         {inputType === SettingsRowType.Switch ? (
-          <SettingsSwitch settingName={setting} onChange={onInput} />
+          <SettingsSwitch getCurrentValue={getCurrentValue} settingName={settingName} onChange={onInput} />
         ) : inputType === SettingsRowType.Slider ? (
-          <SettingsSlider settingName={setting} max={100} min={0} />
+          <SettingsSlider getCurrentValue={getCurrentValue} settingName={settingName} max={100} min={0} />
         ) : inputType === SettingsRowType.Button ? (
           <SettingsButton title={btnLabel || ""} onClick={onInput} />
         ) : inputType === SettingsRowType.DropDown ? (
-          <SettingsDropdown settingName={setting} options={ddOptions || []} onChange={onInput} />
+          <SettingsDropdown getCurrentValue={getCurrentValue} settingName={settingName} options={ddOptions || []} onChange={onInput} />
         ) : inputType === SettingsRowType.TextInput ? (
-          <SettingsTextInput settingName={setting} />
+          <SettingsTextInput getCurrentValue={getCurrentValue} settingName={settingName} />
         ) : inputType === SettingsRowType.ColorInput ? (
-          <SettingsColorPicker settingName={setting} onChange={onInput} />
+          <SettingsColorPicker getCurrentValue={getCurrentValue} settingName={settingName} onChange={onInput} />
         ) : (<div />)}
       </div>
     </div>

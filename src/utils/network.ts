@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/tauri"
 
 interface NetworkStatus {
+  powered: boolean;
   connected?: boolean;
   devName?: string;
 }

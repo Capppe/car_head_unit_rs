@@ -1,17 +1,10 @@
 import { SettingsRow, SettingsRowType } from "../../components/settings/row";
 import { SettingsRowLabel } from "../../components/settings/rowlabel";
+import { getSetting, saveSetting } from "../../utils/settings_utils";
 
 export const RearCameraSettings = () => {
   const viewRearCamera = () => {
     console.log("Viewing rear camera");
-  }
-
-  const toggleRearCamera = (value: boolean) => {
-    console.log("Rear camera on: ", value);
-  }
-
-  const toggleGuideLines = (value: boolean) => {
-    console.log("Guidelines on: ", value);
   }
 
   const showConfigGuideLine = () => {
@@ -23,27 +16,31 @@ export const RearCameraSettings = () => {
       <SettingsRowLabel title="Rear camera" />
       <SettingsRow
         inputType={SettingsRowType.Button}
-        setting=""
+        settingName=""
+        getCurrentValue={() => { }}
         title="View rear camera"
         btnLabel="View"
         onInput={() => viewRearCamera()}
       />
       <SettingsRow
         inputType={SettingsRowType.Switch}
-        setting="rear-camera-enable"
+        settingName='rear-camera-enable'
+        getCurrentValue={() => getSetting('rear-camera-enable')}
         title="Enable rear camera"
-        onInput={(b: boolean) => toggleRearCamera(b)}
+        onInput={(b: boolean) => saveSetting('rear-camera-enable', b ? 'true' : 'false')}
       />
       <SettingsRow
         inputType={SettingsRowType.Switch}
-        setting="rear-camera-show-lines"
+        settingName="rear-camera-show-lines"
+        getCurrentValue={() => getSetting('rear-camera-show-lines')}
         title="Guide-lines"
         label="Show guiding lines when reversing"
-        onInput={(b: boolean) => toggleGuideLines(b)}
+        onInput={(b: boolean) => saveSetting('rear-camera-show-lines', b ? 'true' : 'false')}
       />
       <SettingsRow
         inputType={SettingsRowType.Button}
-        setting="rear-camera-lines-setup"
+        settingName=""
+        getCurrentValue={() => { }}
         title="Configure lines"
         label="Configure guide-lines"
         btnLabel="Configure"

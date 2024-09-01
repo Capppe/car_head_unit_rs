@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { getNumberSetting } from "../../utils/settings_utils";
+import { getSetting } from "../../utils/settings_utils";
 
 interface SliderProps {
   settingName: string;
+  getCurrentValue: Function;
   max: number;
   min: number;
 }
 
-export const SettingsSlider: React.FC<SliderProps> = ({ settingName, max, min }) => {
-  const [value, setValue] = useState<number>();
+export const SettingsSlider: React.FC<SliderProps> = ({ settingName, getCurrentValue, max, min }) => {
+  const [value, setValue] = useState<number>(-1);
 
   useEffect(() => {
-    const getSetting = async () => {
-      const setting = await getNumberSetting(settingName);
+    const awaitSetting = async () => {
+      const setting = await getSetting(settingName);
+      const current = await getCurrentValue();
 
-      setValue(setting);
+      setValue(setting ? setting : current || -1);
     }
 
-    getSetting();
+    awaitSetting();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

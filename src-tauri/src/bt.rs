@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use bt_wrapper::{bluetooth::Bluetooth, bt_status::Status, device::Device};
+use bt_wrapper::{bluetooth::Bluetooth, bluetooth::Power, bt_status::Status, device::Device};
 use tauri::State;
 use tokio::sync::oneshot;
 
@@ -8,7 +8,7 @@ use crate::SharedBluetoothManager;
 
 #[tauri::command]
 pub async fn get_bluetooth_status() -> Result<Status, String> {
-    let bt = Bluetooth::new().await;
+    let bt = Bluetooth::new(None).await;
 
     let bluetooth = bt.unwrap();
 
@@ -20,7 +20,7 @@ pub async fn get_bluetooth_status() -> Result<Status, String> {
 
 #[tauri::command]
 pub async fn get_known_devices() -> Result<Vec<Device>, String> {
-    let bt = Bluetooth::new().await;
+    let bt = Bluetooth::new(None).await;
     let mut devs = Vec::new();
 
     let bluetooth = bt.unwrap();
@@ -116,4 +116,18 @@ pub async fn disconnect_from_device(
         Ok(_) => Ok("disconnected".to_string()),
         Err(_) => Err(()),
     }
+}
+
+#[tauri::command]
+pub async fn turn_off_bt(state: State<'_, SharedBluetoothManager>) -> Result<(), String> {
+    let manager = state.lock().await;
+    let bluetooth = &manager.bt;
+    bluetooth.power_off().await
+}
+
+#[tauri::command]
+pub async fn turn_on_bt(state: State<'_, SharedBluetoothManager>) -> Result<(), String> {
+    let manager = state.lock().await;
+    let bluetooth = &manager.bt;
+    bluetooth.power_on().await
 }

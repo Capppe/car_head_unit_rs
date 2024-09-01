@@ -1,5 +1,5 @@
 export type CustomDropdownOption = {
-  label: string | number | null;
+  label: string;
   value: number;
 }
 
@@ -19,7 +19,7 @@ export const Languages: CustomDropdownOption[] = [
   { label: "Närpesisk", value: 2 },
 ]
 
-export type AudioSinks = {
+export type AudioSink = {
   index: number;
   name: string;
   description: string;
@@ -29,3 +29,12 @@ export type Setting = {
   name: string;
   value: number | string | boolean;
 }
+
+export type Colors = {
+  background: string;
+  text: string;
+  topBar: string;
+  bottomBar: string;
+  icon: string;
+}
+

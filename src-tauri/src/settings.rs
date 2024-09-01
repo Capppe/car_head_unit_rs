@@ -1,66 +1,42 @@
-use std::{
-    fs::{self, File},
-    io::BufReader,
-    path::PathBuf,
-};
+use std::sync::Mutex;
 
-use serde::{Deserialize, Serialize};
-use tauri::AppHandle;
+use tauri::{api::path::app_data_dir, AppHandle, Wry};
+use tauri_plugin_store::{Store, StoreBuilder};
 
-//TODO rewrite maybe
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Setting {
-    name: String,
-    value: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct SettingsWrapper {
-    Settings: Vec<Setting>,
-}
-
-impl Setting {
-    pub fn new(name: String, value: String) -> Self {
-        Self { name, value }
-    }
-}
-
-fn find_setting(path: &PathBuf, needle: &str) -> Result<String, ()> {
-    let file = match File::open(path) {
-        Ok(f) => f,
-        Err(_) => return Err(()),
-    };
-    let reader = BufReader::new(file);
-
-    let settings: SettingsWrapper = match serde_json::from_reader(reader) {
-        Ok(json) => json,
-        Err(_) => SettingsWrapper {
-            Settings: Vec::new(),
-        },
-    };
-
-    for setting in settings.Settings {
-        if setting.name == needle.to_string() {
-            return Ok(setting.value);
+#[tauri::command]
+pub fn load_from_store(app: AppHandle, key: String) -> Result<String, String> {
+    if let Some(path) = app_data_dir(&app.config()) {
+        let path = path.join("settings/settings.json");
+        let mut store = StoreBuilder::new(app, path).build();
+        if let Err(e) = store.load() {
+            return Err(format!("Failed to load() store: {}", e));
         }
-    }
 
-    println!("Err");
-    Err(())
+        if let Some(val) = store.get(key.clone()) {
+            Ok(val.to_string())
+        } else {
+            Err(format!("Failed to get value for key: {}", key))
+        }
+    } else {
+        Err(format!("Failed to open app_data_dir"))
+    }
 }
 
 #[tauri::command]
-pub fn get_setting(name: String, app: AppHandle) -> Result<Setting, ()> {
-    let path = app
-        .path_resolver()
-        .resolve_resource("../public/settings/settings.json")
-        .expect("Failed to resolve resource");
+pub fn save_to_store(
+    state: tauri::State<'_, Mutex<Store<Wry>>>,
+    key: String,
+    value: String,
+) -> Result<(), String> {
+    let mut store = state
+        .lock()
+        .map_err(|e| format!("Failed to get lock on store: {}", e))?;
 
-    let line = find_setting(&path, &name);
+    store
+        .insert(key.clone(), value.clone().into())
+        .map_err(|e| format!("Failed to persist setting: {}-{}, cause: {}", key, value, e))?;
 
-    match line {
-        Ok(l) => Ok(Setting::new(name, l)),
-        Err(_) => Err(()),
-    }
+    store
+        .save()
+        .map_err(|e| format!("Failed to save store: {}", e))
 }

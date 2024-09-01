@@ -1,31 +1,36 @@
 import { invoke } from "@tauri-apps/api/tauri";
-import { Setting } from "./constants";
+import { Store } from "tauri-plugin-store-api";
+import { appDataDir } from "@tauri-apps/api/path";
 
-const getSetting = async (name: string, type: any): Promise<Setting> => {
-  const setting = await invoke<typeof type>('get_setting', {
-    name,
-  });
+const store = new Store(await appDataDir() + 'settings/settings.json');
 
-  return setting;
-}
-
-export const getBooleanSetting = async (name: string): Promise<boolean> => {
-  const setting = await getSetting(name, typeof "boolean");
-
-  return setting.value === "true";
-}
-
-export const getNumberSetting = async (name: string): Promise<number> => {
-  const setting = await getSetting(name, typeof 1);
-  return parseInt(setting.value.toString(), 10);
-}
-
-export const getTextSetting = async (name: string): Promise<string> => {
-  const setting = await getSetting(name, typeof "");
-
-  return setting.value.toString();
+export const getSetting = async (name: string) => {
+  console.log("Getting setting: ", name);
+  return store.get<{ value: string }>(name);
 }
 
 export const checkForUpdates = async () => {
   await invoke('check_for_updates');
+}
+
+export const saveSetting = async (name: string, value: string) => {
+  console.log("Saving setting: ", name, value);
+  await store.set(name, { value });
+  await store.save();
+}
+
+export const getColorSettings = async () => {
+  const background = await getSetting('background-color');
+  const text = await getSetting('text-color');
+  const topBar = await getSetting('top-bar-color');
+  const bottomBar = await getSetting('bottom-bar-color');
+  const icon = await getSetting('icon-color');
+
+  return {
+    background: background?.value || "#2f2f2f",
+    text: text?.value || "#f6f6f6",
+    topBar: topBar?.value || "black",
+    bottomBar: bottomBar?.value || "black",
+    icon: icon?.value || "#ffffff",
+  };
 }

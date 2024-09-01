@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { getTextSetting } from "../../utils/settings_utils";
+import { getSetting } from "../../utils/settings_utils";
 
 interface TextInputProps {
   settingName: string;
+  getCurrentValue: Function;
 }
 
-export const SettingsTextInput: React.FC<TextInputProps> = ({ settingName }) => {
-  const [value, setValue] = useState<string>();
+export const SettingsTextInput: React.FC<TextInputProps> = ({ settingName, getCurrentValue }) => {
+  const [value, setValue] = useState<string>("None");
 
   useEffect(() => {
-    const getSetting = async () => {
-      const setting = await getTextSetting(settingName);
+    const awaitSetting = async () => {
+      const setting = await getSetting(settingName);
+      const current = await getCurrentValue();
 
-      setValue(setting);
+      setValue(setting ? setting : current || "None");
     }
 
-    getSetting();
+    awaitSetting();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

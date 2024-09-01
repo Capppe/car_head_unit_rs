@@ -1,9 +1,25 @@
+import { useGlobalState } from "../../components/globalstatecontext";
 import { SettingsRow, SettingsRowType } from "../../components/settings/row";
 import { SettingsRowLabel } from "../../components/settings/rowlabel";
+import { saveSetting } from "../../utils/settings_utils";
 
 export const AppearanceSettings = () => {
+  const { state, setState } = useGlobalState();
+
   const setColor = (color: string, where: string) => {
-    console.log("Setting color: ", color, "for: ", where);
+    saveSetting(where, color);
+
+    const newState = {
+      ...state,
+      colors: {
+        background: where === 'background-color' ? color : state.colors.background,
+        text: where === 'text-color' ? color : state.colors.text,
+        topBar: where === 'top-bar-color' ? color : state.colors.topBar,
+        bottomBar: where === 'bottom-bar-color' ? color : state.colors.bottomBar,
+        icon: where === 'icon-color' ? color : state.colors.icon,
+      }
+    }
+    setState(newState);
   }
   return (
     <div className="col center self-start" style={{ width: '90%' }}>
@@ -11,32 +27,37 @@ export const AppearanceSettings = () => {
       <SettingsRow
         inputType={SettingsRowType.ColorInput}
         title="Background color"
-        setting="background-color"
-        onInput={(o: string) => setColor(o, 'background')}
+        settingName="background-color"
+        getCurrentValue={() => { }}
+        onInput={(o: string) => setColor(o, 'background-color')}
       />
       <SettingsRow
         inputType={SettingsRowType.ColorInput}
         title="Text color"
-        setting="text-color"
-        onInput={(o: string) => setColor(o, 'text')}
+        settingName="text-color"
+        getCurrentValue={() => { }}
+        onInput={(o: string) => setColor(o, 'text-color')}
       />
       <SettingsRow
         inputType={SettingsRowType.ColorInput}
         title="Top bar color"
-        setting="top-bar-color"
-        onInput={(o: string) => setColor(o, 'topBar')}
+        settingName="top-bar-color"
+        getCurrentValue={() => { }}
+        onInput={(o: string) => setColor(o, 'top-bar-color')}
       />
       <SettingsRow
         inputType={SettingsRowType.ColorInput}
         title="Bottom bar color"
-        setting="bottom-bar-color"
-        onInput={(o: string) => setColor(o, 'bottomBar')}
+        settingName="bottom-bar-color"
+        getCurrentValue={() => { }}
+        onInput={(o: string) => setColor(o, 'bottom-bar-color')}
       />
       <SettingsRow
         inputType={SettingsRowType.ColorInput}
         title="Icon color"
-        setting="icon-color"
-        onInput={(o: string) => setColor(o, 'icon')}
+        settingName="icon-color"
+        getCurrentValue={() => { }}
+        onInput={(o: string) => setColor(o, 'icon-color')}
       />
     </div>
   );

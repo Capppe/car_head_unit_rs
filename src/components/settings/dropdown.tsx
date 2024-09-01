@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "../generic/dropdown";
 import { CustomDropdownOption } from "../../utils/constants";
-import { getNumberSetting } from "../../utils/settings_utils";
+import { getSetting } from "../../utils/settings_utils";
 
 interface DropdownProps {
   settingName: string;
+  getCurrentValue?: Function;
   options: CustomDropdownOption[];
   onChange: Function;
 }
 
-export const SettingsDropdown: React.FC<DropdownProps> = ({ settingName, onChange, options }) => {
-  const [value, setValue] = useState<number | string>();
+export const SettingsDropdown: React.FC<DropdownProps> = ({ settingName, getCurrentValue, onChange, options }) => {
+  const [value, setValue] = useState<string>("None");
 
   useEffect(() => {
-    const getSetting = async () => {
-      setValue(await getNumberSetting(settingName));
+    const awaitSetting = async () => {
+      const setting = getCurrentValue ? await getCurrentValue() : await getSetting(settingName);
+
+      setValue(setting || "None");
     }
 
-    getSetting();
+    awaitSetting();
   }, []);
 
   return (
     <div>
       <Dropdown
         options={options}
-        placeholder={options.find(o => o.value.toString() === value?.toString())?.label || "None"}
+        placeholder={value}
         label=""
         onChange={(o: number) => onChange(o)}
         classNames="custom-select settings-dropdown"

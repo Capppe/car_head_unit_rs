@@ -3,6 +3,8 @@ import { getNetworkStatus } from "../utils/network";
 import { getBluetoothStatus } from "../utils/bluetooth";
 import { MusicPlayerStatus } from "../utils/music";
 import { getMusicStatus } from "../utils/music";
+import { Colors } from "../utils/constants";
+import { getColorSettings } from "../utils/settings_utils";
 
 export interface Notification {
   imgSrc: string;
@@ -14,6 +16,7 @@ export interface Notification {
 export interface GlobalState {
   networkConnected?: boolean;
   networkName?: string;
+  networkPowered: boolean;
   btPowered?: boolean;
   btConnected?: boolean;
   btDiscovering?: boolean;
@@ -23,6 +26,7 @@ export interface GlobalState {
   missedNotifs: [Notification] | [];
   noOfMissedNotifs: number;
   showNotif?: (content: React.JSX.Element, timeout: number) => void;
+  colors: Colors;
 }
 
 interface GlobalStateContextType {
@@ -33,6 +37,7 @@ interface GlobalStateContextType {
 const defaultState: GlobalState = {
   networkConnected: false,
   networkName: "",
+  networkPowered: false,
   btPowered: false,
   btConnected: false,
   btDiscovering: false,
@@ -48,7 +53,14 @@ const defaultState: GlobalState = {
   currentTime: "",
   missedNotifs: [],
   noOfMissedNotifs: 0,
-  showNotif: () => { }
+  showNotif: () => { },
+  colors: {
+    background: "#2f2f2f",
+    text: "#f6f6f6",
+    topBar: "black",
+    bottomBar: "black",
+    icon: "#ffffff",
+  }
 }
 
 const GlobalStateContext = createContext<GlobalStateContextType | undefined>(undefined);
@@ -66,11 +78,13 @@ export const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
       const networkStatus = await getNetworkStatus();
       const bluetoothStatus = await getBluetoothStatus();
       const musicStatus = await getMusicStatus();
+      const colors = await getColorSettings();
 
       setState(prevState => ({
         ...prevState,
         networkConnected: networkStatus.connected,
         networkName: networkStatus.devName,
+        networkPowered: networkStatus.powered,
         btPowered: bluetoothStatus.powered,
         btConnected: bluetoothStatus.connectedDevices !== 0,
         btDiscovering: bluetoothStatus.discovering,
@@ -79,7 +93,8 @@ export const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
         currentTime: `${date.getHours()}:${date.getMinutes()}`,
         missedNotifs: [],
         noOfMissedNotifs: 0,
-        showNotif: prevState.showNotif
+        showNotif: prevState.showNotif,
+        colors: colors,
       }));
     }
     updateStatus();

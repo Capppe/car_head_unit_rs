@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Settings.css";
-import { getBooleanSetting } from "../../utils/settings_utils";
+import { getSetting } from "../../utils/settings_utils";
+// import { getBooleanSetting } from "../../utils/settings_utils";
 
 interface SwitchProps {
   settingName: string;
+  getCurrentValue: Function;
   onChange: Function;
 }
 
-export const SettingsSwitch: React.FC<SwitchProps> = ({ settingName, onChange }) => {
+export const SettingsSwitch: React.FC<SwitchProps> = ({ settingName, getCurrentValue, onChange }) => {
   const [isToggled, setIsToggled] = useState<boolean>();
 
   useEffect(() => {
-    const getSetting = async () => {
-      const setting = await getBooleanSetting(settingName);
-      if (setting === undefined) return;
+    const awaitSetting = async () => {
+      const setting = await getSetting(settingName);
+      const currentValue = await getCurrentValue();
 
-      setIsToggled(setting);
+      setting ? setIsToggled(setting.value === 'true') : setIsToggled(currentValue);
     }
 
-    getSetting();
+    awaitSetting();
   }, []);
 
   useEffect(() => {

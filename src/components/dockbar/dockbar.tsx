@@ -23,7 +23,7 @@ export const DockBar: React.FC<DockBarProps> = ({ goHome, changeWindow }) => {
   }
 
   return (
-    <div className="dockbar">
+    <div id="dockbar" className="dockbar">
 
       <div className="dockbar_section dockar_left" id="dockbar_homeButton">
         <button className="dockbar_button" onClick={() => { goHome() }}>
