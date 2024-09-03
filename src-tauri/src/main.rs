@@ -31,6 +31,7 @@ use settings::{load_from_store, save_to_store};
 use tauri::Manager;
 use tauri_plugin_store::StoreBuilder;
 use tokio::sync::{mpsc::Sender, oneshot, Mutex};
+use updater::check_for_update;
 
 pub struct BluetoothManager {
     pub bt: Bluetooth,
@@ -130,6 +131,7 @@ async fn main() {
             // Settings
             save_to_store,
             load_from_store,
+            check_for_update,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,11 +1,24 @@
+import { invoke } from "@tauri-apps/api/tauri";
 import { SettingsRow, SettingsRowType } from "../../components/settings/row";
 import { SettingsRowLabel } from "../../components/settings/rowlabel";
-import { checkForUpdates } from "../../utils/settings_utils";
+import { useState } from "react";
 
+//TODO check if actually working
 export const UpdateSettings = () => {
+  const [status, setStatus] = useState<string>("");
+
   const checkUpdates = () => {
     console.log("Checking for updates");
-    checkForUpdates();
+    setStatus("Checking...");
+    invoke('check_for_update', {
+      currVersion: '0.0.0',
+    }).then(r => {
+      if (!r) {
+        setStatus("Latest version!");
+      } else {
+        setStatus("Update available, press download to begin download");
+      }
+    });
   }
 
   return (
@@ -13,11 +26,13 @@ export const UpdateSettings = () => {
       <SettingsRowLabel title="Updates" />
       <SettingsRow
         inputType={SettingsRowType.Button}
-        setting="updates"
+        settingName="updates"
+        getCurrentValue={() => { }}
         title="Check for updates"
         btnLabel="Check"
         onInput={() => { checkUpdates(); }}
       />
+      <div>{status != "" ? status : ""}</div>
     </div>
   );
 }

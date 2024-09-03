@@ -21,6 +21,7 @@ serial_rs = { git = "https://github.com/capppe/serial_rs.git" }
 tauri-build = "1"
 openssl-sys = { version = "0.9", features = ["vendored"] }
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+reqwest = { version = "0.12.7", features = ["json"] }
 
 # [dependencies.bt_wrapper]
 # path = "../../../rust/libs/bt_wrapper"

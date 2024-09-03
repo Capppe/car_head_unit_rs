@@ -1,4 +1,3 @@
-import { invoke } from "@tauri-apps/api/tauri";
 import { Store } from "tauri-plugin-store-api";
 import { appDataDir } from "@tauri-apps/api/path";
 
@@ -7,10 +6,6 @@ const store = new Store(await appDataDir() + 'settings/settings.json');
 export const getSetting = async (name: string) => {
   console.log("Getting setting: ", name);
   return store.get<{ value: string }>(name);
-}
-
-export const checkForUpdates = async () => {
-  await invoke('check_for_updates');
 }
 
 export const saveSetting = async (name: string, value: string) => {

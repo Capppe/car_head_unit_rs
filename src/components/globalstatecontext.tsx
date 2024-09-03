@@ -4,7 +4,6 @@ import { getBluetoothStatus } from "../utils/bluetooth";
 import { MusicPlayerStatus } from "../utils/music";
 import { getMusicStatus } from "../utils/music";
 import { Colors } from "../utils/constants";
-import { getColorSettings } from "../utils/settings_utils";
 
 export interface Notification {
   imgSrc: string;
@@ -78,7 +77,7 @@ export const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
       const networkStatus = await getNetworkStatus();
       const bluetoothStatus = await getBluetoothStatus();
       const musicStatus = await getMusicStatus();
-      const colors = await getColorSettings();
+      // const colors = await getColorSettings();
 
       setState(prevState => ({
         ...prevState,
@@ -94,7 +93,7 @@ export const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
         missedNotifs: [],
         noOfMissedNotifs: 0,
         showNotif: prevState.showNotif,
-        colors: colors,
+        colors: prevState.colors,
       }));
     }
     updateStatus();
