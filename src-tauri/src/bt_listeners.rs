@@ -1,20 +1,21 @@
-use bt_wrapper::{bluetooth::Bluetooth, bt_listener::Listener};
+use bt_wrapper::root::object_manager::ObjectManager;
 
 use crate::signal_handler::emit_to_frontend;
 
 #[tauri::command]
 pub async fn start_device_found_listener(app: tauri::AppHandle) {
-    let bt = Bluetooth::new(None).await;
-    let listener = Listener::new(bt.unwrap()).await;
-    let (sender, receiver) = async_channel::bounded(1);
+    if let Ok(obj_mngr) =
+        ObjectManager::new().map_err(|e| format!("Failed to create object manager: {}", e))
+    {
+        let (tx, mut rx) = tokio::sync::mpsc::channel(100);
 
-    let bt_listener = listener.unwrap();
+        tokio::spawn(async move {
+            let _ = obj_mngr.interfaces_added(tx, None).await;
+        });
 
-    tokio::spawn(async move {
-        let _ = bt_listener.start_device_added_listener(sender).await;
-    });
-
-    while let Ok(response) = receiver.recv().await {
-        emit_to_frontend("device-found", response, app.clone());
+        while let Some(response) = rx.recv().await {
+            println!("Device? : {:?}", response);
+            // emit_to_frontend("device-found", response, app.clone());
+        }
     }
 }

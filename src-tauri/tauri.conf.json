@@ -18,7 +18,9 @@
       "fs": {
         "all": true,
         "scope": [
-          "$RESOURCE/*"
+          "$RESOURCE/*",
+          "file:///*",
+          "$HOME/**"
         ]
       },
       "shell": {

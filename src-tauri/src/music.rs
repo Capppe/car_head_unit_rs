@@ -1,22 +1,25 @@
-use std::{
-    io::{BufRead, BufReader},
-    process::{Command, Stdio},
-};
+use std::collections::HashMap;
 
-use async_channel::Sender;
+use playerctl_wrapper::{
+    metadata::Metadata,
+    player::Player,
+    playerctld::{DBusItem, Properties, Signals},
+    properties,
+};
 use serde::Serialize;
 use serde_json::json;
+use tokio::sync::mpsc::Sender;
 
-use crate::signal_handler::emit_to_frontend;
+use crate::signal_handler::{emit_music_status_to_frontend, emit_to_frontend};
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Clone, Debug, Serialize)]
 pub struct MusicStatus {
     is_playing: Option<bool>,
     title: Option<String>,
-    artist: Option<String>,
+    artist: Option<Vec<String>>,
     album: Option<String>,
     album_url: Option<String>,
-    length: Option<f64>,
+    length: Option<i64>,
 }
 
 #[derive(Default, Debug, Serialize)]
@@ -25,14 +28,14 @@ pub struct MusicPosition {
 }
 
 impl MusicStatus {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             is_playing: Some(false),
             title: Some(String::from("")),
-            artist: Some(String::from("")),
+            artist: Some(Vec::new()),
             album: Some(String::from("")),
             album_url: Some(String::from("")),
-            length: Some(0.0),
+            length: Some(0),
         }
     }
 }
@@ -49,10 +52,10 @@ impl ToString for MusicStatus {
     fn to_string(&self) -> String {
         let is_playing = self.is_playing.unwrap_or(false).to_string();
         let title = self.title.clone().unwrap_or("".to_string());
-        let artist = self.artist.clone().unwrap_or("".to_string());
+        let artist = self.artist.clone().unwrap_or(Vec::new());
         let album = self.album.clone().unwrap_or("".to_string());
         let album_url = self.album_url.clone().unwrap_or("".to_string());
-        let length = self.length.clone().unwrap_or(0.0);
+        let length = self.length.clone().unwrap_or(0);
 
         return json!({
             "is_playing": is_playing,
@@ -66,54 +69,43 @@ impl ToString for MusicStatus {
     }
 }
 
+// TODO: change from using Command to using DBus, either querying playerctl or writing own
+
 #[tauri::command]
 pub fn prev_song() {
-    let _pctl_output = Command::new("playerctl")
-        .arg("previous")
-        .output()
-        .expect("Failed to call playerctl");
+    if let Ok(player) = Player::new() {
+        let _ = player.previous();
+    }
 }
 
 #[tauri::command]
 pub fn next_song() {
-    let _pctl_output = Command::new("playerctl")
-        .arg("next")
-        .output()
-        .expect("Failed to call playerctl");
+    if let Ok(player) = Player::new() {
+        let _ = player.next();
+    }
 }
 
 #[tauri::command]
 pub fn play_pause() {
-    let _pctl_output = Command::new("playerctl")
-        .arg("play-pause")
-        .output()
-        .expect("Failed to call playerctl");
+    if let Ok(player) = Player::new() {
+        let _ = player.play_pause();
+    }
 }
 
 #[tauri::command]
-pub fn seek_song(position: String) {
-    let _pctl_output = Command::new("playerctl")
-        .arg("position")
-        .arg(position)
-        .output()
-        .expect("Failed to call playerctl");
+pub fn seek_song(position: i64) {
+    if let Ok(player) = Player::new() {
+        let _ = player.seek(position);
+    }
 }
 
 #[tauri::command]
 pub fn get_music_position() -> Result<MusicPosition, String> {
     let mut position = MusicPosition::new();
-    let pctl_output = Command::new("playerctl")
-        .arg("position")
-        .output()
-        .expect("Failed to call playerctl");
-
-    if pctl_output.status.success() {
-        let output = String::from_utf8_lossy(&pctl_output.stdout);
-        let s = output.trim();
-
-        position.position = Some(s.parse::<f64>().unwrap_or(0.0));
-
-        return Ok(position);
+    if let Ok(player) = Player::new() {
+        if let Ok(pos) = player.get_property("Position") {
+            position.position = Some(pos);
+        }
     }
 
     return Ok(position);
@@ -122,77 +114,42 @@ pub fn get_music_position() -> Result<MusicPosition, String> {
 #[tauri::command]
 pub fn get_music_status() -> Result<MusicStatus, String> {
     let mut status = MusicStatus::new();
-    let pctl_output = Command::new("playerctl")
-        .arg("metadata")
-        .arg("--format")
-        .arg("{{status}}&&{{title}}&&{{artist}}&&{{album}}&&{{mpris:artUrl}}&&{{mpris:length}}")
-        .output()
-        .expect("Failed to get music status");
 
-    if pctl_output.status.success() {
-        let output = String::from_utf8_lossy(&pctl_output.stdout);
-        let s = output.trim().split("&&").collect::<Vec<&str>>();
+    if let Ok(player) = Player::new() {
+        let sts = player.get_property("Metadata").unwrap();
+        let metadata = Metadata::from(&sts);
 
-        status.is_playing = Some(s[0].trim() == "Playing");
-        status.title = Some(s[1].to_string());
-        status.artist = Some(s[2].to_string());
-        status.album = Some(s[3].to_string());
-        status.album_url = Some(s[4].to_string());
-        status.length = Some(s[5].parse::<f64>().unwrap_or(0.0) / 1000000.0);
-
-        return Ok(status);
+        status.title = metadata.title;
+        status.album = metadata.album;
+        status.artist = metadata.artist;
+        status.length = metadata.length;
+        status.is_playing = Some(true);
     }
+
     return Ok(status);
 }
 
-pub async fn send_music_status(sender: Sender<String>) {
-    let mut status = MusicStatus::new();
-
-    tokio::spawn(async move {
-        let mut pctl_track_info = Command::new("playerctl")
-            .arg("metadata")
-            .arg("--format")
-            .arg("{{status}}&&{{title}}&&{{artist}}&&{{album}}&&{{mpris:artUrl}}&&{{mpris:length}}")
-            .arg("--follow")
-            .stdout(Stdio::piped())
-            .spawn()
-            .expect("Failed to execute playerctl");
-
-        let stdout = pctl_track_info
-            .stdout
-            .take()
-            .expect("Failed to open stdout");
-
-        let reader = BufReader::new(stdout);
-        let mut lines = reader.lines();
-
-        while let Some(Ok(line)) = lines.next() {
-            let info = line.split("&&").collect::<Vec<&str>>();
-
-            status.is_playing = Some(info[0].trim() == "Playing");
-            status.title = Some(info[1].to_string());
-            status.artist = Some(info[2].to_string());
-            status.album = Some(info[3].to_string());
-            status.album_url = Some(info[4].to_string());
-            status.length = Some(info[5].parse::<f64>().unwrap_or(0.0) / 1000000.0);
-
-            sender
-                .send(status.to_string())
-                .await
-                .expect("Channel is closed");
-        }
-    });
+pub async fn send_music_status(sender: Sender<HashMap<String, String>>) {
+    if let Ok(props) = properties::Properties::new() {
+        let _ = props
+            .properties_changed(sender.clone(), Some(props.get_interface()))
+            .await;
+    }
 }
 
 #[tauri::command]
 pub async fn start_music_status_listener(app: tauri::AppHandle) {
-    let (sender, receiver) = async_channel::bounded(1);
+    let (sender, mut receiver) = tokio::sync::mpsc::channel(100);
+    let props = properties::Properties::new().unwrap();
 
     tokio::spawn(async move {
-        let _ = send_music_status(sender).await;
+        let sender = sender.clone();
+        let _ = props
+            .properties_changed(sender, Some(props.get_interface()))
+            .await;
     });
-
-    while let Ok(response) = receiver.recv().await {
-        emit_to_frontend("music-status-changed", response, app.clone());
+    while let Some(response) = receiver.recv().await {
+        println!("Resp: {:?}", response);
+        // emit_music_status_to_frontend("music-status-changed", response, app.clone());
     }
 }

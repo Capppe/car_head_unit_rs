@@ -19,7 +19,6 @@ use bt::{
     start_discovery, stop_discovery, turn_off_bt, turn_on_bt,
 };
 use bt_listeners::start_device_found_listener;
-use bt_wrapper::bluetooth::Bluetooth;
 use hardware::audio::sinks::{find_sinks, get_current_sink, set_active_sink};
 use hardware::audio::{audio::change_volume, audio::get_curr_volume};
 use music::{
@@ -33,20 +32,20 @@ use tauri_plugin_store::StoreBuilder;
 use tokio::sync::{mpsc::Sender, oneshot, Mutex};
 use updater::check_for_update;
 
-pub struct BluetoothManager {
-    pub bt: Bluetooth,
-    pub cancel_sender: Option<oneshot::Sender<()>>,
-}
+// pub struct BluetoothManager {
+//     pub bt: Bluetooth,
+//     pub cancel_sender: Option<oneshot::Sender<()>>,
+// }
 
-impl BluetoothManager {
-    async fn new() -> Self {
-        let bt = Bluetooth::new(None).await.unwrap();
-        BluetoothManager {
-            bt,
-            cancel_sender: None,
-        }
-    }
-}
+// impl BluetoothManager {
+//     async fn new() -> Self {
+//         let bt = Bluetooth::new(None).await.unwrap();
+//         BluetoothManager {
+//             bt,
+//             cancel_sender: None,
+//         }
+//     }
+// }
 
 pub struct ArduinoManager {
     pub cancel_sender: Option<Sender<()>>,
@@ -62,18 +61,18 @@ impl ArduinoManager {
     }
 }
 
-type SharedBluetoothManager = Arc<Mutex<BluetoothManager>>;
+// type SharedBluetoothManager = Arc<Mutex<BluetoothManager>>;
 type SharedArduinoManager = Arc<Mutex<ArduinoManager>>;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 #[tokio::main]
 async fn main() {
-    let bluetooth_manager = Arc::new(Mutex::new(BluetoothManager::new().await));
+    // let bluetooth_manager = Arc::new(Mutex::new(BluetoothManager::new().await));
     let arduino_manager = Arc::new(Mutex::new(ArduinoManager::new().await));
 
     tauri::Builder::default()
-        .manage(bluetooth_manager)
+        // .manage(bluetooth_manager)
         .manage(arduino_manager)
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
