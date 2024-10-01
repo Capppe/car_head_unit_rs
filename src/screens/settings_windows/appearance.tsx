@@ -1,25 +1,25 @@
-import { useGlobalState } from "../../components/globalstatecontext";
+import { useColorState } from "../../components/globalstatecontext";
 import { SettingsRow, SettingsRowType } from "../../components/settings/row";
 import { SettingsRowLabel } from "../../components/settings/rowlabel";
 import { saveSetting } from "../../utils/settings_utils";
 
 export const AppearanceSettings = () => {
-  const { state, setState } = useGlobalState();
+  const { colorState, setColorState } = useColorState();
 
   const setColor = (color: string, where: string) => {
     saveSetting(where, color);
 
     const newState = {
-      ...state,
+      ...colorState,
       colors: {
-        background: where === 'background-color' ? color : state.colors.background,
-        text: where === 'text-color' ? color : state.colors.text,
-        topBar: where === 'top-bar-color' ? color : state.colors.topBar,
-        bottomBar: where === 'bottom-bar-color' ? color : state.colors.bottomBar,
-        icon: where === 'icon-color' ? color : state.colors.icon,
+        background: where === 'background-color' ? color : colorState.colors.background,
+        text: where === 'text-color' ? color : colorState.colors.text,
+        topBar: where === 'top-bar-color' ? color : colorState.colors.topBar,
+        bottomBar: where === 'bottom-bar-color' ? color : colorState.colors.bottomBar,
+        icon: where === 'icon-color' ? color : colorState.colors.icon,
       }
     }
-    setState(newState);
+    setColorState(newState);
   }
   return (
     <div className="col center self-start" style={{ width: '90%' }}>

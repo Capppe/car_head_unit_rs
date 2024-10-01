@@ -1,6 +1,6 @@
-import React, { LegacyRef } from "react";
+import React, { LegacyRef, useEffect, useState } from "react";
 import { TaskbarMenuButton } from "./taskbarmenu_button";
-import { Notification, useGlobalState } from "../globalstatecontext";
+import { Notification } from "../../utils/constants";
 import { getBtImgUrl, getNetImgUrl } from "../../utils/image_utils";
 import { TaskbarMenuNotif } from "./taskbarmenu_notif";
 
@@ -11,13 +11,25 @@ interface TaskbarMenuProps {
 }
 
 export const TaskbarMenu: React.FC<TaskbarMenuProps> = ({ ddRef, modalVisible, notifications }) => {
-  const { state } = useGlobalState();
+  const [btImage, setBtImage] = useState("");
+  const [netImage, setNetImage] = useState("");
+
+  useEffect(() => {
+    const getBtImage = async () => {
+      setBtImage(await getBtImgUrl());
+    }
+    const getNetImage = async () => {
+      setNetImage(await getNetImgUrl());
+    }
+    getBtImage();
+    getNetImage();
+  }, []);
 
   return (
     <div ref={ddRef} className={modalVisible ? "modal" : "modal hide"} id="notifModal">
       <div className="taskbarmenu_button_row">
-        <TaskbarMenuButton src={getBtImgUrl(state)} onClick={() => console.log("Bt")} />
-        <TaskbarMenuButton src={getNetImgUrl(state)} onClick={() => console.log("wifi")} />
+        <TaskbarMenuButton src={btImage} onClick={() => console.log("Bt")} />
+        <TaskbarMenuButton src={netImage} onClick={() => console.log("wifi")} />
       </div>
       <div className="taskbarmenu_notifs_container">
         <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
@@ -32,7 +44,7 @@ export const TaskbarMenu: React.FC<TaskbarMenuProps> = ({ ddRef, modalVisible, n
             </button>
           </div>
         </div>
-        {state.noOfMissedNotifs != 0 ? notifications && notifications.map((notif, index) => (
+        {0 != 0 ? notifications && notifications.map((notif, index) => (
           <TaskbarMenuNotif
             key={index}
             imgSrc={notif.imgSrc}

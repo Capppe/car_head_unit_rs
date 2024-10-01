@@ -1,5 +1,5 @@
 import React from "react";
-import { Notification } from "../globalstatecontext";
+import { Notification } from "../../utils/constants";
 
 interface TaskbarMenuNotifProps extends Notification {
   onClick: () => void;

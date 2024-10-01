@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { TaskbarMenu } from "./taskbarmenu";
-import { useGlobalState } from "../globalstatecontext";
 
 interface DropDownIF {
   children: React.ReactNode;
@@ -8,7 +7,6 @@ interface DropDownIF {
 
 export const DropDown: React.FC<DropDownIF> = (props: DropDownIF) => {
 
-  const { state } = useGlobalState();
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -62,7 +60,7 @@ export const DropDown: React.FC<DropDownIF> = (props: DropDownIF) => {
       >
         {props.children}
       </div>
-      <TaskbarMenu ddRef={ddRef} modalVisible={modalVisible} notifications={state.missedNotifs} />
+      <TaskbarMenu ddRef={ddRef} modalVisible={modalVisible} notifications={[]} />
     </div>
   );
 }

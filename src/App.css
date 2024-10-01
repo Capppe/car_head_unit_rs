@@ -1,5 +1,5 @@
-@import "./colors.css";
-@import url("./NotifTemplates.css");
+@import "./styles/Colors.css";
+@import url("./styles/NotifTemplates.css");
 
 :root {
   --topBarHeight: 40px;

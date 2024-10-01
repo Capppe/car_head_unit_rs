@@ -1,56 +1,16 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { getNetworkStatus } from "../utils/network";
-import { getBluetoothStatus } from "../utils/bluetooth";
-import { MusicPlayerStatus } from "../utils/music";
-import { getMusicStatus } from "../utils/music";
+import React, { createContext, useContext, useState } from "react";
 import { Colors } from "../utils/constants";
 
-export interface Notification {
-  imgSrc: string;
-  header: string;
-  content: string;
-  time: string;
-}
-
-export interface GlobalState {
-  networkConnected?: boolean;
-  networkName?: string;
-  networkPowered: boolean;
-  btPowered?: boolean;
-  btConnected?: boolean;
-  btDiscovering?: boolean;
-  btDevName: string;
-  musicStatus: MusicPlayerStatus,
-  currentTime: string;
-  missedNotifs: [Notification] | [];
-  noOfMissedNotifs: number;
+export interface ColorState {
   colors: Colors;
 }
 
-interface GlobalStateContextType {
-  state: GlobalState;
-  setState: React.Dispatch<React.SetStateAction<GlobalState>>;
+interface ColorStateContextType {
+  colorState: ColorState;
+  setColorState: React.Dispatch<React.SetStateAction<ColorState>>;
 }
 
-const defaultState: GlobalState = {
-  networkConnected: false,
-  networkName: "",
-  networkPowered: false,
-  btPowered: false,
-  btConnected: false,
-  btDiscovering: false,
-  btDevName: "",
-  musicStatus: {
-    is_playing: false,
-    title: "",
-    artist: "",
-    album: "",
-    album_url: "",
-    length: 0,
-  },
-  currentTime: "",
-  missedNotifs: [],
-  noOfMissedNotifs: 0,
+const defaultColorState: ColorState = {
   colors: {
     background: "#2f2f2f",
     text: "#f6f6f6",
@@ -60,62 +20,26 @@ const defaultState: GlobalState = {
   }
 }
 
-const GlobalStateContext = createContext<GlobalStateContextType | undefined>(undefined);
+const ColorStateContext = createContext<ColorStateContextType | undefined>(undefined);
 
-interface GlobalStateProviderProps {
+interface ColorStateProviderProps {
   children: React.ReactNode;
 }
 
-export const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
-  const timer = useRef<number>();
-
-  useEffect(() => {
-    const updateStatus = async () => {
-      const date = new Date();
-      const networkStatus = await getNetworkStatus();
-      const bluetoothStatus = await getBluetoothStatus();
-      const musicStatus = await getMusicStatus();
-
-      setState(prevState => ({
-        ...prevState,
-        networkConnected: networkStatus.connected,
-        networkName: networkStatus.devName,
-        networkPowered: networkStatus.powered,
-        btPowered: bluetoothStatus.powered,
-        btConnected: bluetoothStatus.connectedDevices !== 0,
-        btDiscovering: bluetoothStatus.discovering,
-        btDevName: "",
-        musicStatus: musicStatus,
-        currentTime: `${date.getHours()}:${date.getMinutes()}`,
-        missedNotifs: [],
-        noOfMissedNotifs: 0,
-        colors: prevState.colors,
-      }));
-    }
-    updateStatus();
-
-    timer.current = window.setInterval(updateStatus, 10000);
-
-    return () => {
-      if (timer.current) {
-        clearInterval(timer.current);
-      }
-    };
-  }, []);
-
-  const [state, setState] = useState<GlobalState>(defaultState);
+export const ColorStateProvider = ({ children }: ColorStateProviderProps) => {
+  const [colorState, setColorState] = useState<ColorState>(defaultColorState);
 
   return (
-    <GlobalStateContext.Provider value={{ state, setState }}>
+    <ColorStateContext.Provider value={{ colorState, setColorState }}>
       {children}
-    </GlobalStateContext.Provider>
+    </ColorStateContext.Provider>
   );
 }
 
-export const useGlobalState = (): GlobalStateContextType => {
-  const context = useContext(GlobalStateContext);
+export const useColorState = (): ColorStateContextType => {
+  const context = useContext(ColorStateContext);
   if (!context) {
-    throw new Error("useGlobalState must be used within a GlobalStateProvider");
+    throw new Error("useColorState must be used within a ColorStateProvider");
   }
 
   return context;

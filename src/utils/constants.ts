@@ -1,3 +1,10 @@
+export type Notification = {
+  imgSrc: string;
+  header: string;
+  content: string;
+  time: string;
+}
+
 export type CustomDropdownOption = {
   label: string;
   value: number;

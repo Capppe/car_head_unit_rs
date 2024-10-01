@@ -1,9 +1,9 @@
 import React from "react";
 import { VolumeSlider } from "./volumeslider";
-import { useGlobalState } from "../globalstatecontext";
 import { PowerMenu } from "../notification_templates/power_menu";
 import { getDockImg } from "../../utils/image_utils";
 import { SettingsWindow } from "../../screens/settings";
+import { useNotification } from "../notification/notification_context";
 
 interface DockBarProps {
   goHome: Function;
@@ -12,10 +12,10 @@ interface DockBarProps {
 
 export const DockBar: React.FC<DockBarProps> = ({ goHome, changeWindow }) => {
 
-  const { state } = useGlobalState();
+  const { showNotification } = useNotification();
 
   const showPowerMenu = () => {
-    state.showNotif ? state.showNotif(<PowerMenu />, 15000) : console.log("State not initialized!");
+    showNotification(<PowerMenu />);
   }
 
   const showSettings = () => {
