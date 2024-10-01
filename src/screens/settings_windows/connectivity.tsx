@@ -2,11 +2,8 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { SettingsRow, SettingsRowType } from "../../components/settings/row";
 import { SettingsRowLabel } from "../../components/settings/rowlabel";
 import { saveSetting } from "../../utils/settings_utils";
-import { useGlobalState } from "../../components/globalstatecontext";
 
 export const ConnectivitySettings = () => {
-  const { state, setState } = useGlobalState();
-
   const showConfigRadio = () => {
     console.log("Showing radio config");
   }
@@ -15,10 +12,6 @@ export const ConnectivitySettings = () => {
     saveSetting('bluetooth-on', b ? 'true' : 'false')
 
     invoke(b ? 'turn_on_bt' : 'turn_off_bt').then(() => {
-      setState(prevState => ({
-        ...prevState,
-        btPowered: b,
-      }));
     }).catch(e => {
       console.error("Show in error modal: ", e);
     });
@@ -28,10 +21,6 @@ export const ConnectivitySettings = () => {
     saveSetting('wifi-on', b ? 'true' : 'false');
 
     invoke(b ? 'turn_on_wifi' : 'turn_off_wifi').then(() => {
-      setState(prevState => ({
-        ...prevState,
-        networkPowered: b,
-      }));
     }).catch(e => {
       console.error("Show in error modal: ", e);
     });;

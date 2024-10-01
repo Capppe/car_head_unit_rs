@@ -1,8 +1,11 @@
 use bt_wrapper::{
     adapter::adapter1::Adapter1, dbus_utils::parse_variant, devices::device::device1::Device1,
-    root::object_manager::ObjectManager, Properties,
+    root::object_manager::ObjectManager, utils::get_path_from_address, Properties,
 };
 use serde::Serialize;
+use tauri::State;
+
+use crate::BluetoothManager;
 
 #[derive(Serialize)]
 pub struct BluetoothStatus {
@@ -26,8 +29,11 @@ pub struct BluetoothStatus {
 }
 
 #[tauri::command]
-pub fn get_bluetooth_status() -> Result<BluetoothStatus, String> {
-    let adapter = Adapter1::new().map_err(|e| format!("Failed to initialize adapter, {}", e))?;
+pub fn get_bluetooth_status(state: State<'_, BluetoothManager>) -> Result<BluetoothStatus, String> {
+    let adapter = match &state.adapter1 {
+        Some(a) => a,
+        None => return Err(format!("Failed to initialize adapter")),
+    };
 
     let version = adapter.get_property("Version").unwrap_or(0);
     let uuids = adapter.get_property("UUIDs").unwrap_or(Vec::new());
@@ -70,13 +76,13 @@ pub fn get_bluetooth_status() -> Result<BluetoothStatus, String> {
     })
 }
 
-#[derive(Serialize, Debug, Default)]
+#[derive(Serialize, Debug, Default, Clone)]
 pub struct Device {
-    name: String,
-    address: String,
-    paired: bool,
-    connected: bool,
-    icon: String,
+    pub name: String,
+    pub address: String,
+    pub paired: bool,
+    pub connected: bool,
+    pub icon: String,
 }
 
 #[tauri::command]
@@ -134,28 +140,39 @@ pub fn get_known_devices() -> Result<Vec<Device>, String> {
 }
 
 #[tauri::command]
-pub async fn start_discovery(_duration: u64) -> Result<(), String> {
-    if let Ok(adapter) = Adapter1::new() {
-        tokio::spawn(async move {
-            adapter
-                .start_discovery()
-                .map_err(|e| format!("Failed to start discovery: {}", e))
-        });
-        Ok(())
+pub async fn start_discovery(
+    _duration: u64,
+    state: State<'_, BluetoothManager>,
+) -> Result<(), String> {
+    if let Some(adapter) = &state.adapter1 {
+        adapter
+            .start_discovery()
+            .map_err(|e| format!("Failed to start discovery: {}", e))
     } else {
         Err(format!("Failed to create Adapter"))
     }
 }
 
 #[tauri::command]
-pub async fn stop_discovery() -> Result<(), String> {
-    if let Ok(adapter) = Adapter1::new() {
+pub async fn stop_discovery(state: State<'_, BluetoothManager>) -> Result<(), String> {
+    if let Some(adapter) = &state.adapter1 {
         adapter
             .stop_discovery()
             .map_err(|e| format!("Failed to stop discovery: {}", e))
     } else {
         Err(format!("Failed to create Adapter"))
     }
+}
+
+#[tauri::command]
+pub async fn remove_device(
+    address: String,
+    state: State<'_, BluetoothManager>,
+) -> Result<(), String> {
+    if let Some(adapter) = &state.adapter1 {
+        adapter.remove_device(get_path_from_address(&address, "/org/bluez/hci0").into())?
+    }
+    Err(format!("Failed to create Adapter"))
 }
 
 #[tauri::command]
@@ -192,6 +209,7 @@ pub async fn disconnect_from_device(address: String) -> Result<(), String> {
     }
 }
 
+// TODO: add listener / emit on power on/off
 #[tauri::command]
 pub async fn turn_off_bt() -> Result<(), String> {
     if let Ok(adapter) = Adapter1::new() {

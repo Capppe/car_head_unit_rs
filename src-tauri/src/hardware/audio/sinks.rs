@@ -1,4 +1,4 @@
-use std::{fmt::write, process::Command};
+use std::process::Command;
 
 use serde::{Deserialize, Serialize};
 
@@ -9,15 +9,9 @@ pub struct AudioSink {
     description: String,
 }
 
-impl AudioSink {
-    pub fn new(index: u32, name: String, description: String) -> Self {
-        Self {
-            index,
-            name,
-            description,
-        }
-    }
+// TODO: remove 'Command' usage
 
+impl AudioSink {
     fn get_available_sinks() -> Result<Vec<Self>, String> {
         let data = Command::new("pactl")
             .arg("-f")

@@ -132,7 +132,7 @@ pub async fn get_available_boards() -> Result<Vec<Board>, String> {
     boards.append(&mut arduino_boards);
     boards.append(&mut esp_boards);
 
-    println!("Boards: {:?}", boards);
+    // println!("Boards: {:?}", boards);
 
     Ok(boards)
 }

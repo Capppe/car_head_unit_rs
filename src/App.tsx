@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { MainContainer } from "./components/main_container";
-import { NotificationBar } from "./components/notification_bar";
 import { MainMenu } from "./screens/main_menu";
 import { Taskbar } from "./components/taskbar/taskbar";
 import { useGlobalState } from "./components/globalstatecontext";
@@ -39,7 +38,6 @@ const App = () => {
 
   return (
     <div style={{ height: '100%' }}>
-      <NotificationBar />
       <Taskbar />
       <MainContainer child_element={currentElement} />
       <DockBar goHome={showHomeWindow} changeWindow={changeWindow} />

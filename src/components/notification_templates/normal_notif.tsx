@@ -1,34 +1,46 @@
 import React from "react";
+import "../../styles/Notification.css";
+
+type Action = {
+  text: string;
+  action: Function;
+}
 
 interface NormalNotifProps {
   imgSrc: string;
   header: string;
   content: string;
+  action1?: Action;
+  action2?: Action;
 }
 
-export const NormalNotif: React.FC<NormalNotifProps> = ({ imgSrc, header, content }) => {
+export const NormalNotif: React.FC<NormalNotifProps> = ({ imgSrc, header, content, action1, action2 }) => {
   return (
-    <div className="" id="notification_container" >
-      <div id="notification_icon">
-        <img src={imgSrc} alt="notification image" id="notif_image" />
+    <div className="row center notification">
+      <div className="notification-icon">
+        <img src={imgSrc} alt={imgSrc} />
       </div>
 
-      <div id="notification_text_container">
-        <div id="notification_header">
-          <h3 className="notif_text" id="notif_header">{header}</h3>
+      <div className="col center text-container">
+        <div>
+          <h2>{header}</h2>
         </div>
-        <div id="notification_text">
-          <h5 className="notif_text" id="notif_content">{content}</h5>
+        <div>
+          <h4>{content}</h4>
         </div>
       </div>
 
       <div id="notification_actions_container">
-        <button type="button" className="button" id="action_button_1">
-          Action 1
-        </button>
-        <button type="button" className="button" id="action_button_2">
-          Action 2
-        </button>
+        {action1 &&
+          <button type="button" className="button" id="action_button_1" onClick={() => action1.action()}>
+            {action1.text}
+          </button>
+        }
+        {action2 &&
+          <button type="button" className="button" id="action_button_2" onClick={() => action2.action()}>
+            {action2.text}
+          </button>
+        }
       </div>
     </div >
   );

@@ -1,55 +1,76 @@
-import React, { useState } from "react";
-import { BluetoothDevice } from "../../screens/bluetooth";
+import React, { useEffect, useRef, useState } from "react";
+import { BluetoothDevice, DeviceUpdate } from "../../utils/constants";
 import { getBtDevImgUrl } from "../../utils/image_utils";
-import { connectToDevice, disconnectFromDevice } from "../../utils/bluetooth";
-import { useGlobalState } from "../globalstatecontext";
-import { NormalNotif } from "../notification_templates/normal_notif";
+import { connectToDevice, disconnectFromDevice, removeDevice } from "../../utils/bluetooth";
+import { listen, UnlistenFn } from "@tauri-apps/api/event";
 
+// TODO: IMPL PASSKEY CONFIRMATION THINGY
 export const BluetoothDeviceComp: React.FC<BluetoothDevice> = ({ name, address: address, icon }) => {
-
-  const [shouldShowInfo, setShouldShowInfo] = useState(false);
-  const [connStatus, setConnStatus] = useState<boolean>(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [connected, setConnected] = useState<boolean>(false);
   const [disableButton, setDisableButton] = useState<boolean>(false);
 
-  const { state } = useGlobalState();
+  const unlistenDevConnected = useRef<UnlistenFn>();
+
+  useEffect(() => {
+    const startEventListeners = async () => {
+      if (!unlistenDevConnected.current) {
+        unlistenDevConnected.current = await listen<DeviceUpdate>("device-update", (event) => {
+          if (address === event.payload.device_addr) {
+            setConnected(event.payload.connected);
+          }
+        });
+      }
+    }
+
+    startEventListeners();
+
+    return () => {
+      if (unlistenDevConnected.current) unlistenDevConnected.current();
+    }
+  }, [])
 
   const handleConnectClick = async () => {
     setDisableButton(true);
-    const status = connStatus ? await disconnectFromDevice(address) : await connectToDevice(address);
+    connected
+      ? await disconnectFromDevice(address)
+      : await connectToDevice(address);
 
-    if (status && status === "connected") {
-      setConnStatus(true);
-      if (state && state.showNotif) {
-        state.showNotif(<NormalNotif imgSrc={getBtDevImgUrl(icon)} header="Connected" content={name + " connected successfully"} />, 3000);
-      }
-    }
+    // TODO: connect signals to notif
     setDisableButton(false);
   }
 
+  const handleRemoveClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    // showNotification(<NormalNotif imgSrc={getBtDevImgUrl('phone')} header="Connected" content="Successfully connected to device!" action2={{ text: "test", action: () => console.log("Hej") }} />, 600000);
+    // TODO: if (paired) { displayConfirm }
+    event.stopPropagation();
+    await removeDevice(address);
+  }
+
   return (
-    <div className="bluetooth_device">
-      <div className="bt_dev_mini" onClick={() => setShouldShowInfo(!shouldShowInfo)}>
-        <div style={{ display: 'flex', flexDirection: "row" }}>
+    <div className="col widest device-container">
+      <div className="row center device" onClick={() => setShowMenu(!showMenu)}>
+        <div className="row center">
           <img src={getBtDevImgUrl(icon)} alt={icon} />
           <div>
             <h3>{name || "Name unknown"}</h3>
-            <h4>{address || "Mac unknown"}</h4>
+            <h4>{address || "Address unknown"}</h4>
           </div>
         </div>
-        <button className="bt_dev_button">
+        <button className="remove-button" onClick={(event) => { handleRemoveClick(event) }}>
           <h3>X</h3>
         </button>
       </div>
 
-      <div className={shouldShowInfo ? "bt_dev_maxi" : "bt_dev_maxi hide"}>
-        <div className="row expand">
-          <div className="col">
+      <div className={showMenu ? "menu show" : "menu"}>
+        <div className="cont">
+          <div className="col center">
             <button className="big" disabled={disableButton} onClick={() => { handleConnectClick() }}>
-              {disableButton && connStatus
+              {disableButton && connected
                 ? "Disconnecting..."
-                : disableButton && !connStatus
+                : disableButton && !connected
                   ? "Connecting..."
-                  : !disableButton && connStatus
+                  : !disableButton && connected
                     ? "Disconnect"
                     : "Connect"
               }

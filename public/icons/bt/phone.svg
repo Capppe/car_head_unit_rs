@@ -1,8 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg fill="#f5fffa" width="800px" height="800px" viewBox="0 0 32 32" version="1.1"
-	xmlns="http://www.w3.org/2000/svg">
-	<title>phone</title>
-	<path
-		d="M21.999 4h-12c-1.104 0-1.999 0.896-1.999 2v20c0 1.104 0.895 2 1.999 2h12c1.105 0 2.001-0.896 2.001-2v-20c0-1.104-0.896-2-2.001-2zM13 5h5l0.062 1h-5.062v-1zM15.979 26.5c-0.552 0-1-0.447-1-1s0.448-1 1-1c0.553 0 1 0.447 1 1s-0.448 1-1 1zM21.999 23h-12l0.021-16h11.979v16z"></path>
-</svg>
+<svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256px" height="256px" viewBox="0 0 512 512" xml:space="preserve" fill="#f5fffa" stroke="#f5fffa"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css">  .st0{fill:#f5fffa;}  </style> <g> <path class="st0" d="M355.297,0H156.688C125.375,0,100,25.375,100,56.688v398.625C100,486.625,125.375,512,156.688,512h198.609 C386.609,512,412,486.625,412,455.313V56.688C412,25.375,386.609,0,355.297,0z M256,483.984c-8.094,0-14.672-6.563-14.672-14.672 c0-8.094,6.578-14.656,14.672-14.656s14.672,6.563,14.672,14.656C270.672,477.422,264.094,483.984,256,483.984z M364,424H148V64 h216V424z"></path> </g> </g></svg>

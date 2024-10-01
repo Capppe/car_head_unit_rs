@@ -1,11 +1,11 @@
-import { useGlobalState } from "../components/globalstatecontext";
 import { WebView } from "../components/navigation/webview";
 
 export const NavigationWindow = () => {
-  const { state } = useGlobalState();
+  const networkConnected = true;
+
   return (
     <div>
-      {state.networkConnected ? (
+      {networkConnected ? (
         <WebView src="https://www.openstreetmap.org/export/embed.html" />
       ) : (
         <div>An internet connection is required to use navigation!</div>

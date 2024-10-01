@@ -1,14 +1,24 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
 export const removeQuotes = (str: string) => {
-  return str.replace(/(^"|"$|^'|'$)/g, '');
+  try {
+    return str.replace(/(^"|"$|^'|'$)/g, '');
+  } catch {
+    return str;
+  }
 }
 
-export const secToMinSec = (sec: number) => {
-  const m = Math.floor(sec / 60);
-  const s = (sec - m * 60);
-  const secs = s < 9 ? '0' + s.toFixed(0) : s.toFixed(0);
-  return `${m.toFixed(0)}:${secs}`;
+export const microSecToMinSec = (mSec: number) => {
+  const totalSecs = Math.floor(mSec / 1_000_000);
+
+  const mins = Math.floor(totalSecs / 60);
+  const secs = totalSecs % 60;
+
+  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+}
+
+export const microSecToSec = (mSec: number) => {
+  return (mSec / 1_000_000).toFixed(0);
 }
 
 export const getFormattedTime = () => {

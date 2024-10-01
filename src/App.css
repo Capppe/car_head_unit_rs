@@ -29,11 +29,6 @@ html {
   margin-top: calc(var(--topBarHeight) - 15px);
 }
 
-img {
-  width: 10%;
-  height: auto;
-}
-
 .container,
 .row,
 .col,
@@ -61,6 +56,10 @@ img {
 .center {
   align-items: center;
   justify-content: center;
+}
+
+.center.expand {
+  justify-content: space-between;
 }
 
 .container {
@@ -282,60 +281,6 @@ label {
   border-bottom-left-radius: 10px;
   transition: all 0.2s ease-in-out;
   overflow: hidden;
-}
-
-#notification_container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0px 40px;
-  width: 100%;
-}
-
-#notification_icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.6em 1.2em;
-}
-
-#notification_icon img {
-  height: 10%;
-  width: 100px;
-}
-
-#notification_actions_container {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  margin-right: 40px;
-}
-
-#notification_text_container {
-  flex-grow: 100;
-  align-self: flex-start;
-  justify-self: flex-start;
-}
-
-#notification_header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#notification_text {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  margin-bottom: 10px;
-}
-
-#notif_header {
-  font-size: 28px;
-}
-
-#notif_content {
-  font-size: 22px;
 }
 
 .dropdown {

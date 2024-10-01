@@ -1,4 +1,5 @@
-import { GlobalState } from "../components/globalstatecontext";
+import { getBluetoothStatus } from "./bluetooth";
+import { getNetworkStatus } from "./network";
 
 const iconPath = "icons/";
 const taskbarIconPath = `${iconPath}taskbar/`;
@@ -18,28 +19,26 @@ export const getTaskBarImg = (icon: string) => {
   return `${taskbarIconPath}${icon}.svg`;
 }
 
-export const getBtImgUrl = (state: GlobalState) => {
+export const getBtImgUrl = async () => {
+  let status = await getBluetoothStatus();
   let svgName = "";
 
-  if (state.btConnected) { svgName = "bluetooth-on.svg" }
-  else if (state.btDiscovering) { svgName = "bluetooth-searching.svg" }
-  else if (state.btPowered) { svgName = "bluetooth-on.svg" }
+  if (status.connectedDevices && status.connectedDevices > 0) { svgName = "bluetooth-on.svg" }
+  else if (status.discovering) { svgName = "bluetooth-searching.svg" }
+  else if (status.powered) { svgName = "bluetooth-on.svg" }
   else { svgName = "bluetooth-off.svg" }
 
   return taskbarIconPath.concat(svgName);
 }
 
-export const getNetImgUrl = (state: GlobalState) => {
-  let svgName = "";
+export const getNetImgUrl = async () => {
+  const status = await getNetworkStatus();
 
-  if (state.networkConnected) { svgName = "wifi-on.svg" }
-  else { svgName = "wifi-off.svg" }
-
-  return taskbarIconPath.concat(svgName);
+  return taskbarIconPath.concat(status.connected ? "wifi-on.svg" : "wifi-off.svg");
 }
 
 export const getBtDevImgUrl = (icon: string) => {
-  if (icon === null || icon === 'null') { return `${btDevIconPath}unknown.svg`; }
+  if (icon === null || icon === 'null' || icon === "") { return `${btDevIconPath}unknown.svg`; }
   return `${btDevIconPath}${icon}.svg`;
 }
 
@@ -50,7 +49,6 @@ export const getMusicImgUrl = (icon: string) => {
 
 export const getMainImgUrl = (icon: string) => {
   if (icon === null || icon === 'null') { return "" }
-  console.log(`${mainPath}${icon}.svg`);
   return `${mainPath}${icon}.svg`;
 }
 

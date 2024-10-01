@@ -30,12 +30,28 @@ export function startDiscovery() {
   invoke("start_discovery", { duration: 10 });
 }
 
+export function stopDiscovery() {
+  invoke("stop_discovery");
+}
+
 export async function connectToDevice(address: string): Promise<string> {
-  const status = await invoke<string>("connect_to_device", { address });
+  try {
+    await invoke<string>("connect_to_device", { address });
+    return "Connected";
+  } catch (error) {
+    return `Failed&&${error}`;
+  }
+}
+
+export async function disconnectFromDevice(address: string): Promise<string> {
+  const status = await invoke<string>("disconnect_from_device", { address });
   return status;
 }
 
-export async function disconnectFromDevice(address: string) {
-  const status = await invoke("disconnect_from_device", { address });
+export async function removeDevice(address: string) {
+  const status = await invoke("remove_device", {
+    address,
+  });
+  console.log(status);
   return status;
 }

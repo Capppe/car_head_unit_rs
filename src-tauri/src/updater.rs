@@ -1,6 +1,5 @@
 use reqwest::get;
 use serde::Deserialize;
-use std::{env, fmt::format};
 
 #[derive(Deserialize)]
 struct Release {
@@ -26,8 +25,6 @@ pub async fn check_for_update(curr_version: String) -> Result<Option<String>, St
     let response = get(&url)
         .await
         .map_err(|e| format!("Failed to get update info from url: {}, cause: {}", &url, e))?;
-
-    println!("Response: {:?}", response);
 
     let release: Release = match response.json().await {
         Ok(r) => r,

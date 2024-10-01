@@ -1,0 +1,21 @@
+@import "../colors.css";
+
+.notification {
+  display: flex;
+  background-color: var(--background_second);
+  height: 100%;
+  border-bottom-left-radius: '10px';
+  justify-content: space-evenly;
+  align-items: center;
+  padding-right: 50px;
+  padding-left: 50px;
+}
+
+.text-container {
+  overflow: hidden;
+}
+
+.notification-icon img {
+  width: 120px;
+  height: 120px;
+}

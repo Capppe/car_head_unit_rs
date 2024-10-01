@@ -1,8 +1,6 @@
-use std::collections::HashMap;
-
 use tauri::Manager;
 
-use crate::music::MusicStatus;
+use crate::{bt::Device, music::MusicStatus};
 
 #[derive(Clone, serde::Serialize)]
 pub struct Payload {
@@ -20,11 +18,11 @@ pub fn emit_to_frontend(sig_name: &str, msg: String, app: tauri::AppHandle) {
     .unwrap();
 }
 
+pub fn emit_bt_device_to_frontend(sig_name: &str, msg: &Device, app: &tauri::AppHandle) {
+    app.emit_all(sig_name, msg).unwrap();
+}
+
 #[tauri::command]
-pub fn emit_music_status_to_frontend(
-    sig_name: &str,
-    msg: HashMap<String, String>,
-    app: tauri::AppHandle,
-) {
-    app.emit_all(sig_name, MusicStatus::new()).unwrap();
+pub fn emit_music_status_to_frontend(sig_name: &str, msg: MusicStatus, app: tauri::AppHandle) {
+    app.emit_all(sig_name, msg).unwrap();
 }

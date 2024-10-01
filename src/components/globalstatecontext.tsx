@@ -24,7 +24,6 @@ export interface GlobalState {
   currentTime: string;
   missedNotifs: [Notification] | [];
   noOfMissedNotifs: number;
-  showNotif?: (content: React.JSX.Element, timeout: number) => void;
   colors: Colors;
 }
 
@@ -52,7 +51,6 @@ const defaultState: GlobalState = {
   currentTime: "",
   missedNotifs: [],
   noOfMissedNotifs: 0,
-  showNotif: () => { },
   colors: {
     background: "#2f2f2f",
     text: "#f6f6f6",
@@ -77,7 +75,6 @@ export const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
       const networkStatus = await getNetworkStatus();
       const bluetoothStatus = await getBluetoothStatus();
       const musicStatus = await getMusicStatus();
-      // const colors = await getColorSettings();
 
       setState(prevState => ({
         ...prevState,
@@ -92,7 +89,6 @@ export const GlobalStateProvider = ({ children }: GlobalStateProviderProps) => {
         currentTime: `${date.getHours()}:${date.getMinutes()}`,
         missedNotifs: [],
         noOfMissedNotifs: 0,
-        showNotif: prevState.showNotif,
         colors: prevState.colors,
       }));
     }

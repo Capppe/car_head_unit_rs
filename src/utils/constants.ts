@@ -38,3 +38,24 @@ export type Colors = {
   icon: string;
 }
 
+export type MusicStatus = {
+  album: string;
+  album_url: string;
+  artist: string[];
+  is_playing: boolean;
+  length: number;
+  title: string;
+}
+
+export type BluetoothDevice = {
+  name: string;
+  address: string;
+  paired: boolean;
+  connected: boolean;
+  icon: string;
+};
+
+export type DeviceUpdate = {
+  connected: boolean;
+  device_addr: string;
+}

@@ -1,4 +1,3 @@
-import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/tauri";
 
 export interface MusicPlayerStatus {
@@ -8,17 +7,6 @@ export interface MusicPlayerStatus {
   album: string;
   album_url: string;
   length: number;
-}
-
-type Payload = {
-  message: string;
-}
-
-export const startMusicEventListener = async () => {
-  await listen<Payload>("music-status-changed", (event) => {
-    const json: MusicPlayerStatus = JSON.parse(event.payload.message);
-    return json;
-  });
 }
 
 export const getMusicStatus = async (): Promise<MusicPlayerStatus> => {
