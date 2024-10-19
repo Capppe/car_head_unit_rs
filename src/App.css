@@ -25,6 +25,7 @@ html {
   width: 100%;
   height: calc(100% - var(--dockBarHeight) + 9px);
   padding: 0;
+  padding-top: 5px;
   margin: 0;
   margin-top: calc(var(--topBarHeight) - 15px);
 }
